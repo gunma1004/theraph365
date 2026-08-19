@@ -5,20 +5,20 @@ import re
 # 1. seoul 폴더 생성
 os.makedirs("seoul", exist_ok=True)
 
-# 2. seoul/index.html 내용 작성 (마사지몽 브랜드 & 5개 업체 & 25개 구 링크)
+# 2. seoul/index.html 내용 작성 (테라피365 브랜드 & 5개 업체 & 25개 구 링크)
 seoul_html_content = """<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seoul 24시 1:1 맞춤 출장 마사지 테라피 | 마사지몽</title>
+    <title>Seoul 24시 1:1 맞춤 출장 마사지 테라피 | 테라피365</title>
     <meta name="description" content="Seoul 24시간 1:1 맞춤 출장 마사지. 바쁜 현대인을 위한 가장 빠르고 안락한 홈케어 솔루션.">
     <meta name="keywords" content="Seoul 홈타이, Seoul 출장마사지, Seoul 24시간 마사지, Seoul 1인샵 테라피">
     <meta name="robots" content="index, follow">
     
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="마사지몽">
-    <meta property="og:title" content="Seoul 출장 마사지 & 24시 프리미엄 홈케어 | 마사지몽">
+    <meta property="og:site_name" content="테라피365">
+    <meta property="og:title" content="Seoul 출장 마사지 & 24시 프리미엄 홈케어 | 테라피365">
     <meta property="og:description" content="서울 전지역 신속 배정! 1:1 맞춤형 프리미엄 방문 바디 테라피">
     <meta property="og:image" content="/images/main-banner.jpg">
 
@@ -173,7 +173,7 @@ seoul_html_content = """<!DOCTYPE html>
     </div>
 
     <footer>
-        <p>© 마사지몽 서울 전지역 프리미엄 테라피 안내. All rights reserved.</p>
+        <p>© 테라피365 서울 전지역 프리미엄 테라피 안내. All rights reserved.</p>
     </footer>
 </body>
 </html>
@@ -195,13 +195,13 @@ if os.path.exists("index.html"):
         with open("index.html", "w", encoding="utf-8") as f:
             f.write(main_content)
 
-print("✔ 마사지몽: seoul/index.html 생성 및 메인 홈 연결 완료!")
-'@ | Out-File -FilePath "create_massagemong_seoul.py" -Encoding utf8
+print("✔ 테라피365: seoul/index.html 생성 및 메인 홈 연결 완료!")
+'@ | Out-File -FilePath "create_theraphy365_seoul.py" -Encoding utf8
 
 # 실행 및 깃허브 배포
-python create_massagemong_seoul.py
+python create_theraphy365_seoul.py
 python update_seo_keywords.py
 python generate_seo.py
 git add .
-git commit -m "마사지몽 서울 전지역 포괄 페이지(seoul/index.html) 신설 및 5개 업체 반영 배포"
+git commit -m "테라피365 서울 전지역 포괄 페이지(seoul/index.html) 신설 및 5개 업체 반영 배포"
 git push
