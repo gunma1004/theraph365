@@ -1,10 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 import os
-import re
 
 print("🚀 테라피365 브랜드 변환 시작...")
 
-# 1. 모든 HTML 파일 내 브랜드명을 '테라피365'로 일괄 치환
 count = 0
 for root, dirs, files in os.walk("."):
     for file in files:
@@ -15,6 +13,7 @@ for root, dirs, files in os.walk("."):
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
         
+        # 이전 브랜드명을 '테라피365'로 일괄 교체
         content = content.replace("마사지몽", "테라피365")
         content = content.replace("스파루나", "테라피365")
         content = content.replace("MassageMong", "Theraphy365")
@@ -26,4 +25,4 @@ for root, dirs, files in os.walk("."):
             f.write(content)
         count += 1
 
-print(f"✔ 총 {count}개 페이지의 브랜드명이 '테라피365'로 일괄 교체되었습니다.")
+print(f"✔ 총 {count}개 페이지 브랜드 변환 완료!")
