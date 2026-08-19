@@ -1,0 +1,671 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 페이지 제목 -->
+    <title>테라피365 | 서울·경기·인천 24시 프리미엄 힐링 테라피 & 프라이빗 홈케어</title>
+    
+    <!-- 검색엔진 메타태그 -->
+    <meta name="naver-site-verification" content="2cf07c6b81fed22559d75dd02c54204be82e8a13" />
+    <meta name="google-site-verification" content="Fhw2xaTWUyknnUdX8K0AMxP5ChW30jU7Al4hkfxy_Bk" />
+    <meta name="description" content="365일 지친 일상에 선사하는 VIP 맞춤 힐링 테라피365! 서울·경기·인천 30분 내 신속 방문, 정찰제 후불 안심 케어, 호텔식 스웨디시 & 아로마.">
+    <meta name="keywords" content="테라피365, 서울 출장마사지, 경기 홈타이, 인천 스웨디시, 강남 테라피, 24시 바디케어, 프라이빗 홈스파">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="테라피365">
+    <meta property="og:title" content="테라피365 | 24시 프리미엄 바디 테라피 & VIP 프라이빗 홈케어">
+    <meta property="og:description" content="수도권 전 지역 30분 안심 방문! 1:1 맞춤형 힐링 에스테틱 & 바디 밸런싱">
+    <meta property="og:image" content="/images/main-banner.jpg">
+    <meta property="og:url" content="https://theraphy365.pages.dev">
+
+    <!-- 구조화된 데이터 (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "테라피365",
+      "alternateName": "Theraphy365",
+      "description": "서울·경기·인천 전 지역 24시간 프라이빗 힐링 바디 테라피 플랫폼",
+      "url": "https://theraphy365.pages.dev"
+    }
+    </script>
+
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --card-bg: #12151e;
+            --card-hover: #181c28;
+            --accent-gold: #e5b567;
+            --accent-gold-light: #fbe3ad;
+            --accent-red: #e74c3c;
+            --accent-cyan: #00d2d3;
+            --text-main: #f0f2f5;
+            --text-sub: #9aa0a6;
+            --border-color: #232938;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.65; padding-bottom: 50px; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* 상단 고정 헤더 */
+        header {
+            background: rgba(18, 21, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(229, 181, 103, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        .header-wrap { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo-text { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; display: flex; align-items: center; gap: 8px; }
+        .logo-text span { color: var(--accent-gold); font-size: 1.45rem; }
+        .header-call {
+            background: linear-gradient(135deg, #e5b567, #c49746);
+            color: #0a0c10;
+            font-weight: 800;
+            font-size: 0.88rem;
+            padding: 7px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(229, 181, 103, 0.4);
+            transition: 0.2s;
+        }
+        .header-call:hover { transform: scale(1.03); }
+
+        /* 럭셔리 히어로 비주얼 배너 */
+        .hero-banner {
+            position: relative;
+            background: linear-gradient(180deg, rgba(10, 12, 16, 0.6) 0%, rgba(10, 12, 16, 0.95) 100%),
+                        url('/images/main-banner.jpg') center/cover no-repeat;
+            padding: 70px 20px 50px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(229, 181, 103, 0.15);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold-light);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .hero-banner h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-gold-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-banner p { font-size: 1rem; color: var(--text-sub); max-width: 600px; margin: 0 auto 20px; }
+        
+        /* 배너 3대 핵심 보장 바 */
+        .guarantee-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .guarantee-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #d1d5db;
+        }
+        .guarantee-item b { color: var(--accent-gold); }
+
+        /* 컨테이너 */
+        .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+        /* 섹션 헤더 */
+        .section-header {
+            margin: 45px 0 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            border-left: 4px solid var(--accent-gold);
+            padding-left: 12px;
+        }
+        .section-header h2 { font-size: 1.35rem; color: #ffffff; font-weight: 800; }
+        .section-header p { font-size: 0.85rem; color: var(--text-sub); }
+
+        /* 5대 제휴업체 카드 */
+        .vendor-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .vendor-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(229, 181, 103, 0.6);
+        }
+        .vendor-thumb-wrap { position: relative; width: 100%; height: 230px; overflow: hidden; }
+        .vendor-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .vendor-card:hover .vendor-img { transform: scale(1.03); }
+        .vendor-tag-float {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(10, 12, 16, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 0.78rem;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .vendor-body { padding: 22px; }
+        .vendor-header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .vendor-title-group { display: flex; align-items: center; gap: 10px; }
+        .vendor-rank { background: linear-gradient(135deg, var(--accent-red), #c0392b); color: #fff; font-size: 0.78rem; font-weight: 800; padding: 4px 9px; border-radius: 6px; }
+        .vendor-title { font-size: 1.3rem; color: #ffffff; font-weight: 800; }
+        .vendor-tagline { color: var(--accent-cyan); font-size: 0.88rem; font-weight: 600; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 20px; }
+        .info-row { display: flex; font-size: 0.92rem; }
+        .info-label { width: 95px; color: var(--accent-gold); font-weight: 700; flex-shrink: 0; }
+        .info-content { color: #c3c7d2; }
+
+        .vendor-btn-wrap { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .btn-call {
+            background: linear-gradient(135deg, #e5b567 0%, #b88628 100%);
+            color: #0a0c10;
+            font-weight: 800;
+            font-size: 1.05rem;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(229, 181, 103, 0.25);
+            transition: 0.2s;
+        }
+        .btn-call:hover { filter: brightness(1.1); }
+
+        /* 구글 지도 섹션 (Google Maps) */
+        .map-section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 35px;
+        }
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-top: 14px;
+        }
+        .map-wrapper iframe { width: 100%; height: 100%; border: 0; }
+        .map-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.88rem;
+            color: var(--text-sub);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .map-chip { background: rgba(0, 210, 211, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; }
+
+        /* 리얼 고객 후기 그리드 */
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .review-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+        .review-stars { color: #f1c40f; font-size: 0.9rem; margin-bottom: 8px; letter-spacing: 2px; }
+        .review-text { color: #e1e3e8; font-size: 0.9rem; margin-bottom: 12px; line-height: 1.55; }
+        .review-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-sub); border-top: 1px solid #1f2433; padding-top: 8px; }
+        .review-author { font-weight: bold; color: var(--accent-gold); }
+
+        /* 세련된 Q&A 아코디언 */
+        .qa-container { margin-bottom: 40px; }
+        .qa-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .qa-question {
+            padding: 16px 20px;
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #141722;
+        }
+        .qa-question span.q-mark { color: var(--accent-gold); font-size: 1.1rem; margin-right: 8px; }
+        .qa-answer {
+            padding: 16px 20px;
+            font-size: 0.9rem;
+            color: #c3c7d2;
+            border-top: 1px solid var(--border-color);
+            line-height: 1.6;
+            background: #0f121a;
+        }
+
+        /* 수도권 전 지역 네비게이션 그리드 */
+        .area-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            margin: 35px 0;
+        }
+        .area-box h3 { color: var(--accent-gold); font-size: 1.18rem; font-weight: 800; margin-bottom: 15px; }
+        .region-sub-title { font-size: 0.98rem; font-weight: 800; margin: 20px 0 10px; padding-left: 8px; }
+        .region-sub-title.seoul { border-left: 3px solid var(--accent-red); color: #ff7675; }
+        .region-sub-title.incheon { border-left: 3px solid #3498db; color: #74b9ff; }
+        .region-sub-title.gyeonggi { border-left: 3px solid #2ecc71; color: #55efc4; }
+
+        .area-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+        }
+        .area-item {
+            background: #161a25;
+            border: 1px solid var(--border-color);
+            padding: 10px 6px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .area-item:hover { border-color: var(--accent-gold); background: #222738; }
+        .area-item a { display: block; color: #e1e3e8; font-weight: 600; }
+        .area-item:hover a { color: var(--accent-gold); }
+
+        footer { text-align: center; padding: 30px 20px; font-size: 0.8rem; color: #7f8c8d; border-top: 1px solid var(--border-color); margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 -->
+    <header>
+        <div class="header-wrap">
+            <div class="logo-text">테라피<span>365</span></div>
+            <a href="tel:0507-1280-3223" class="header-call">📞 24시 실시간 예약</a>
+        </div>
+    </header>
+
+    <!-- 히어로 배너 영역 -->
+    <div class="hero-banner">
+        <div class="hero-badge">PREMIUM PRIVATE BODY HEALING</div>
+        <h2>365일 지친 일상 속<br>완벽한 쉼표, 테라피365</h2>
+        <p>서울 · 경기 · 인천 수도권 전 지역 30분 안심 빠른 방문 테라피</p>
+        
+        <div class="guarantee-bar">
+            <div class="guarantee-item">✔ <b>100% 후불제</b> 안심 현장결제</div>
+            <div class="guarantee-item">✔ <b>30분 도착</b> 신속 배차 시스템</div>
+            <div class="guarantee-item">✔ <b>전문 자격</b> 베테랑 테라피스트</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- 1. 추천 매장 TOP 5 -->
+        <div class="section-header">
+            <div>
+                <h2>테라피365 엄선 제휴 매장 TOP 5</h2>
+                <p>청결과 위생, 서비스 마인드를 검증받은 최고 등급 제휴처</p>
+            </div>
+        </div>
+
+        <!-- 업체 1: 기쁨조 테라피 -->
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor1.jpg" alt="기쁨조 테라피" class="vendor-img">
+                <div class="vendor-tag-float">👑 최우수 만족도 매장</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">추천 01</span>
+                        <span class="vendor-title">기쁨조 테라피</span>
+                    </div>
+                    <div class="vendor-tagline">★ 서울/수도권 전 지역 30분 내 초고속 방문</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">시그니처 건식 타이, 감성 아로마 릴렉싱, 딥티슈 집중 케어</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">전문 자격 테라피스트 구성, 천연 에센셜 오일 사용, 1:1 맞춤 컨디셔닝</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3223" class="btn-call">📞 기쁨조 테라피 예약 : 0507-1280-3223</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 업체 2: 한국미인 홈케어 -->
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor2.jpg" alt="한국미인 홈케어" class="vendor-img">
+                <div class="vendor-tag-float">✨ 야간/새벽 집중 힐링</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">추천 02</span>
+                        <span class="vendor-title">한국미인 홈케어</span>
+                    </div>
+                    <div class="vendor-tagline">★ 직장인 피로회복 & 림프 순환 케어 전문</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">프리미엄 스웨디시, 림프 드레니쉬, 전신 바디 밸런싱 케어</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">24시간 연중무휴, 투명한 정찰제 요금 시스템, 철저한 후불제</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3303" class="btn-call">📞 한국미인 홈케어 예약 : 0507-1280-3303</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 업체 3: 미인클럽 스파 & 테라피 -->
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor3.jpg" alt="미인클럽 스파" class="vendor-img">
+                <div class="vendor-tag-float">💎 호텔식 VIP 프로그램</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">추천 03</span>
+                        <span class="vendor-title">미인클럽 스파 & 테라피</span>
+                    </div>
+                    <div class="vendor-tagline">★ 1회용 청결 소독용품 완비 & 감성 힐링</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">타이 + 아로마 스페셜 콤보 코스 (90분/120분)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">위생 소독 관리 철저, 일대일 맞춤 힐링 프로그램 지원</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3193" class="btn-call">📞 미인클럽 테라피 예약 : 0507-1280-3193</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 업체 4: 퀸즈홈테라피 -->
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor4.jpg" alt="퀸즈홈테라피" class="vendor-img">
+                <div class="vendor-tag-float">🌿 감성 바디 스트레칭</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">추천 04</span>
+                        <span class="vendor-title">퀸즈홈테라피</span>
+                    </div>
+                    <div class="vendor-tagline">★ 섬세한 압 조절 & 체형 맞춤 솔루션</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">감성 로드 스웨디시, 전신 릴렉싱 스트레칭, 스페셜 풋 케어</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">프리미엄 힐링 솔루션 제공, 신속한 1:1 테라피스트 배정</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3334" class="btn-call">📞 퀸즈홈테라피 예약 : 0507-1280-3334</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 업체 5: 동탄미씨홈케어 -->
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor5.jpg" alt="동탄미씨홈케어" class="vendor-img">
+                <div class="vendor-tag-float">🏷️ 가성비 정찰제 1위</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">추천 05</span>
+                        <span class="vendor-title">동탄미씨홈케어</span>
+                    </div>
+                    <div class="vendor-tagline">★ 합리적인 가격 구성 & 친절한 1:1 상담</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">오리지널 정통 타이, 등/어깨 집중 케어, 전신 아로마 힐링</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">합리적인 가격 구성, 친절한 바디 케어 상담, 단골 재이용률 상위</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3302" class="btn-call">📞 동탄미씨홈케어 예약 : 0507-1280-3302</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 수도권 실시간 서비스 거점 안내 (구글 지도) -->
+        <div class="section-header">
+            <div>
+                <h2>수도권 24시 실시간 서비스 구역</h2>
+                <p>서울 중심 및 경기·인천 전 지역 30분 신속 배차 네트워크</p>
+            </div>
+        </div>
+        <div class="map-section-card">
+            <div class="map-wrapper">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d202409.8291410185!2d126.83400137452668!3d37.5639735952877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca2012d58d63b%3A0x679469796e625a6f!2z7ISc7Jq47Yq567OE7Iuc!5e0!3m2!1sko!2skr!4v1700000000000!5m2!1sko!2skr" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            <div class="map-info-bar">
+                <div>📍 <b>출발 대기 지점 :</b> 서울 강남/마포/영등포 및 인천, 수원/성남 거점 24시 상시 대기</div>
+                <div class="map-chip">30분 내 도착 보장 구역</div>
+            </div>
+        </div>
+
+        <!-- 3. 실제 고객 후기 -->
+        <div class="section-header">
+            <div>
+                <h2>테라피365 실제 고객 이용 후기</h2>
+                <p>100% 실제 예약 고객님들이 남겨주신 솔직한 평가입니다.</p>
+            </div>
+        </div>
+        <div class="review-grid">
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"야근 후 어깨가 너무 결려서 처음으로 신청해봤는데, 25분 만에 오셔서 정말 정성껏 풀어주셨습니다. 선입금 없는 후불이라 안심했어요."</p>
+                <div class="review-meta">
+                    <span class="review-author">강남구 역삼동 직장인 이** 님</span>
+                    <span>방문일 2일 전</span>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"아로마 90분 코스 받았는데 오일 향도 고급스럽고 관리사님 압 조절이 딱 맞아서 꿀잠 잤습니다. 다음 주에 또 이용할 예정입니다."</p>
+                <div class="review-meta">
+                    <span class="review-author">인천 송도동 거주 박** 님</span>
+                    <span>방문일 3일 전</span>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"출장 서비스라 위생이 걱정이었는데 매트 커버랑 수건 전부 1회용으로 깔끔하게 챙겨오셔서 호텔 스파 받는 기분이었습니다."</p>
+                <div class="review-meta">
+                    <span class="review-author">수원 인계동 거주 정** 님</span>
+                    <span>방문일 4일 전</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 자주 묻는 질문 (Q&A) -->
+        <div class="section-header">
+            <div>
+                <h2>자주 묻는 질문 (FAQ)</h2>
+                <p>예약 전 고객님들이 가장 많이 문의하시는 내용입니다.</p>
+            </div>
+        </div>
+        <div class="qa-container">
+            <div class="qa-item">
+                <div class="qa-question"><span class="q-mark">Q.</span> 예약 후 도착까지 얼마나 걸리나요?</div>
+                <div class="qa-answer">A. 서울, 경기, 인천 각 거점별로 전문 테라피스트가 24시간 상시 대기 중이며, 교통 상황에 따라 예약 완료 후 평균 25분~35분 내외로 신속하게 방문합니다.</div>
+            </div>
+            <div class="qa-item">
+                <div class="qa-question"><span class="q-mark">Q.</span> 선입금이나 예약금이 있나요?</div>
+                <div class="qa-answer">A. 테라피365는 어떠한 경우에도 사전 예약금이나 선입금을 요구하지 않습니다. 관리사가 현장에 도착하여 확인 후 결제하시는 100% 안심 후불제입니다.</div>
+            </div>
+            <div class="qa-item">
+                <div class="qa-question"><span class="q-mark">Q.</span> 준비해야 할 물품이 따로 있나요?</div>
+                <div class="qa-answer">A. 최고급 에센셜 오일, 1회용 청결 위생 매트, 타월 등 관리에 필요한 모든 전문 비품을 준비해 방문하므로 편안한 상태로 기다려주시면 됩니다.</div>
+            </div>
+        </div>
+
+        <!-- 5. 수도권 전 지역 바로가기 (서울·인천·경기) -->
+        <div class="area-box">
+            <h3>📍 테라피365 수도권 전 지역 안내 (서울 · 경기 · 인천)</h3>
+
+            <!-- 서울특별시 25개 구 -->
+            <div class="region-sub-title seoul">[ 서울특별시 25개 자치구 ]</div>
+            <div class="area-grid">
+                <div class="area-item" style="border-color:#e74c3c;"><a href="/seoul/index.html" style="color:#f1c40f; font-weight:bold;">★ 서울 전지역</a></div>
+                <div class="area-item"><a href="/gangnam/index.html">강남구</a></div>
+                <div class="area-item"><a href="/seocho/index.html">서초구</a></div>
+                <div class="area-item"><a href="/songpa/index.html">송파구</a></div>
+                <div class="area-item"><a href="/gangdong/index.html">강동구</a></div>
+                <div class="area-item"><a href="/mapo/index.html">마포구</a></div>
+                <div class="area-item"><a href="/yongsan/index.html">용산구</a></div>
+                <div class="area-item"><a href="/seodaemun/index.html">서대문구</a></div>
+                <div class="area-item"><a href="/eunpyeong/index.html">은평구</a></div>
+                <div class="area-item"><a href="/jongno/index.html">종로구</a></div>
+                <div class="area-item"><a href="/junggu/index.html">중구</a></div>
+                <div class="area-item"><a href="/jungnang/index.html">중랑구</a></div>
+                <div class="area-item"><a href="/seongbuk/index.html">성북구</a></div>
+                <div class="area-item"><a href="/gangbuk/index.html">강북구</a></div>
+                <div class="area-item"><a href="/dobong/index.html">도봉구</a></div>
+                <div class="area-item"><a href="/nowon/index.html">노원구</a></div>
+                <div class="area-item"><a href="/seongdong/index.html">성동구</a></div>
+                <div class="area-item"><a href="/gwangjin/index.html">광진구</a></div>
+                <div class="area-item"><a href="/dongdaemun/index.html">동대문구</a></div>
+                <div class="area-item"><a href="/yeongdeungpo/index.html">영등포구</a></div>
+                <div class="area-item"><a href="/guro/index.html">구로구</a></div>
+                <div class="area-item"><a href="/geumcheon/index.html">금천구</a></div>
+                <div class="area-item"><a href="/yangcheon/index.html">양천구</a></div>
+                <div class="area-item"><a href="/gangse/index.html">강서구</a></div>
+                <div class="area-item"><a href="/dongjak/index.html">동작구</a></div>
+                <div class="area-item"><a href="/gwanak/index.html">관악구</a></div>
+            </div>
+
+            <!-- 인천광역시 -->
+            <div class="region-sub-title incheon">[ 인천광역시 8개 구/군 ]</div>
+            <div class="area-grid">
+                <div class="area-item"><a href="/incheon_bupyeong/index.html">인천 부평구</a></div>
+                <div class="area-item"><a href="/incheon_namdong/index.html">인천 남동구</a></div>
+                <div class="area-item"><a href="/incheon_yeonsu/index.html">인천 연수구(송도)</a></div>
+                <div class="area-item"><a href="/incheon_michuhol/index.html">인천 미추홀구</a></div>
+                <div class="area-item"><a href="/incheon_seogu/index.html">인천 서구(청라)</a></div>
+                <div class="area-item"><a href="/incheon_gyeyang/index.html">인천 계양구</a></div>
+                <div class="area-item"><a href="/incheon_junggu/index.html">인천 중구(영종도)</a></div>
+                <div class="area-item"><a href="/incheon_donggu/index.html">인천 동구</a></div>
+            </div>
+
+            <!-- 경기도 주요 시/구 -->
+            <div class="region-sub-title gyeonggi">[ 경기도 주요 시·구 ]</div>
+            <div class="area-grid">
+                <div class="area-item"><a href="/suwon/index.html">수원시 전체</a></div>
+                <div class="area-item"><a href="/suwon_paldal/index.html">수원 팔달구</a></div>
+                <div class="area-item"><a href="/suwon_yeongtong/index.html">수원 영통구(광교)</a></div>
+                <div class="area-item"><a href="/seongnam/index.html">성남시 전체</a></div>
+                <div class="area-item"><a href="/seongnam_bundang/index.html">성남 분당구(판교)</a></div>
+                <div class="area-item"><a href="/goyang/index.html">고양시 전체</a></div>
+                <div class="area-item"><a href="/goyang_ilsandong/index.html">고양 일산동구</a></div>
+                <div class="area-item"><a href="/yongin/index.html">용인시 전체</a></div>
+                <div class="area-item"><a href="/yongin_suji/index.html">용인 수지구</a></div>
+                <div class="area-item"><a href="/bucheon/index.html">부천시</a></div>
+                <div class="area-item"><a href="/hwaseong/index.html">화성시(동탄)</a></div>
+                <div class="area-item"><a href="/pyeongtaek/index.html">평택시(고덕)</a></div>
+                <div class="area-item"><a href="/siheung/index.html">시흥시(배곧)</a></div>
+                <div class="area-item"><a href="/gimpo/index.html">김포시(구래)</a></div>
+                <div class="area-item"><a href="/paju/index.html">파주시(운정)</a></div>
+                <div class="area-item"><a href="/namyangju/index.html">남양주시(다산)</a></div>
+                <div class="area-item"><a href="/uijeongbu/index.html">의정부시</a></div>
+                <div class="area-item"><a href="/hanam/index.html">하남시(미사)</a></div>
+                <div class="area-item"><a href="/gwangmyeong/index.html">광명시(철산)</a></div>
+                <div class="area-item"><a href="/anyang/index.html">안양시(평촌)</a></div>
+                <div class="area-item"><a href="/ansan/index.html">안산시(중앙)</a></div>
+                <div class="area-item"><a href="/gunpo/index.html">군포시(산본)</a></div>
+                <div class="area-item"><a href="/guri/index.html">구리시</a></div>
+                <div class="area-item"><a href="/osan/index.html">오산시</a></div>
+                <div class="area-item"><a href="/gwangju_gyeonggi/index.html">경기 광주시</a></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>© 테라피365 (Theraphy365). 24시 프리미엄 홈케어 All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
