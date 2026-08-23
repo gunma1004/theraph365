@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://theraphy365.pages.dev/sitemap.xml
+Sitemap: https://theraphy365.massagemong-kr.workers.dev/sitemap.xml
