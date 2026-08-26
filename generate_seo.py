@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-BASE_URL = "https://theraphy365.pages.dev"
+BASE_URL = "https://theraphy365.netlify.app"
 today = datetime.today().strftime('%Y-%m-%d')
 
 # 1. robots.txt 생성
@@ -25,7 +25,6 @@ html_files = []
 seen_urls = set()
 
 for root, dirs, files in os.walk("."):
-    # .git, .vscode 등 실제 숨김 폴더만 제외 (현재폴더 . 은 정상 포함)
     parts = root.replace("\\", "/").split("/")
     if any(p.startswith(".") and p not in [".", ".."] for p in parts):
         continue
@@ -50,7 +49,6 @@ for root, dirs, files in os.walk("."):
                 seen_urls.add(url)
                 html_files.append((url, priority))
 
-# sitemap.xml 작성
 sitemap_lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
@@ -75,5 +73,4 @@ with open("sitemap.xml", "w", encoding="utf-8") as f:
 with open("urllist.txt", "w", encoding="utf-8") as f:
     f.write("\n".join(urllist_lines))
 
-print(f"✔ robots.txt 갱신 완료")
-print(f"✔ 총 {len(html_files)}개 정상 URL이 sitemap.xml 및 urllist.txt에 완벽히 등록되었습니다!")
+print(f"✔ Netlify 기준 robots.txt 및 {len(html_files)}개 URL sitemap.xml 생성 완료!")
