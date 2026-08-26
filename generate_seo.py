@@ -1,14 +1,18 @@
 ﻿# -*- coding: utf-8 -*-
 import os
-import glob
 from datetime import datetime
 
-# 3호점 정식 도메인 주소
 BASE_URL = "https://theraphy365.pages.dev"
 today = datetime.today().strftime('%Y-%m-%d')
 
-# 1. robots.txt 새로 생성 (Sitemap 주소 동기화)
+# 1. robots.txt 생성
 robots_content = f"""User-agent: *
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Googlebot
 Allow: /
 
 Sitemap: {BASE_URL}/sitemap.xml
@@ -16,18 +20,21 @@ Sitemap: {BASE_URL}/sitemap.xml
 with open("robots.txt", "w", encoding="utf-8") as f:
     f.write(robots_content)
 
-# 2. 모든 HTML 파일 탐색하여 sitemap.xml 및 urllist.txt 생성
+# 2. sitemap.xml & urllist.txt 생성
 html_files = []
+seen_urls = set()
+
 for root, dirs, files in os.walk("."):
+    # .git, .vscode 등 실제 숨김 폴더만 제외 (현재폴더 . 은 정상 포함)
+    parts = root.replace("\\", "/").split("/")
+    if any(p.startswith(".") and p not in [".", ".."] for p in parts):
+        continue
+
     for file in files:
-        if file.endswith(".html"):
+        if file.lower().endswith(".html"):
             file_path = os.path.join(root, file)
             rel_path = os.path.relpath(file_path, ".").replace("\\", "/")
             
-            # 깃허브/시스템 숨김 폴더 제외
-            if rel_path.startswith("."):
-                continue
-                
             if rel_path == "index.html":
                 url = f"{BASE_URL}/"
                 priority = "1.0"
@@ -39,7 +46,9 @@ for root, dirs, files in os.walk("."):
                 url = f"{BASE_URL}/{rel_path}"
                 priority = "0.8"
                 
-            html_files.append((url, priority))
+            if url not in seen_urls:
+                seen_urls.add(url)
+                html_files.append((url, priority))
 
 # sitemap.xml 작성
 sitemap_lines = [
@@ -66,5 +75,5 @@ with open("sitemap.xml", "w", encoding="utf-8") as f:
 with open("urllist.txt", "w", encoding="utf-8") as f:
     f.write("\n".join(urllist_lines))
 
-print(f"✔ robots.txt의 사이트맵 주소가 '{BASE_URL}/sitemap.xml' 로 변경되었습니다.")
-print(f"✔ 총 {len(html_files)}개 페이지가 포함된 sitemap.xml 및 urllist.txt가 완벽히 재생성되었습니다.")
+print(f"✔ robots.txt 갱신 완료")
+print(f"✔ 총 {len(html_files)}개 정상 URL이 sitemap.xml 및 urllist.txt에 완벽히 등록되었습니다!")

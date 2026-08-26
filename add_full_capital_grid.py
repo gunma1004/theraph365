@@ -2,124 +2,112 @@
 import re
 
 # ==============================================================================
-# 수도권 전체 구/동 상세 매핑 데이터
+# 수도권 전체 구/동 상세 네비게이션 HTML 컴포넌트
+# (메인/서브 어디에 삽입되어도 디자인이 깨지지 않도록 인라인 스타일 보강)
 # ==============================================================================
 FULL_REGIONS_HTML = """
         <!-- 수도권 전 지역 (서울·인천·경기) 통합 네비게이션 -->
-        <div class="area-box" style="margin-top:35px; background:#161821; border:1px solid #2a2d37; border-radius:12px; padding:20px;">
-            <h3 style="font-size:1.2rem; color:#f1c40f; margin-bottom:15px; border-bottom:1px solid #2a2d37; padding-bottom:10px;">📍 수도권 전 지역 세부 바로가기 (서울 · 인천 · 경기)</h3>
+        <div class="area-box" style="margin:35px 0; background:#12151e; border:1px solid #232938; border-radius:14px; padding:24px;">
+            <h3 style="font-size:1.18rem; color:#e5b567; font-weight:800; margin-bottom:15px; border-bottom:1px solid #232938; padding-bottom:10px;">📍 테라피365 수도권 전 지역 안내 (서울 · 경기 · 인천)</h3>
 
-            <!-- 1. 서울특별시 -->
-            <div style="font-weight:bold; color:#e74c3c; margin:15px 0 8px 0; font-size:1.05rem;">[ 서울특별시 전지역 & 25개 자치구 ]</div>
-            <div class="gu-grid">
-                <a href="/seoul/index.html" class="gu-item" style="border-color:#e74c3c; color:#f1c40f; font-weight:bold;">★ 서울 전지역</a>
-                <a href="/gangnam/index.html" class="gu-item">강남구</a>
-                <a href="/seocho/index.html" class="gu-item">서초구</a>
-                <a href="/songpa/index.html" class="gu-item">송파구</a>
-                <a href="/gangdong/index.html" class="gu-item">강동구</a>
-                <a href="/mapo/index.html" class="gu-item">마포구</a>
-                <a href="/yongsan/index.html" class="gu-item">용산구</a>
-                <a href="/seodaemun/index.html" class="gu-item">서대문구</a>
-                <a href="/eunpyeong/index.html" class="gu-item">은평구</a>
-                <a href="/jongno/index.html" class="gu-item">종로구</a>
-                <a href="/junggu/index.html" class="gu-item">중구</a>
-                <a href="/jungnang/index.html" class="gu-item">중랑구</a>
-                <a href="/seongbuk/index.html" class="gu-item">성북구</a>
-                <a href="/gangbuk/index.html" class="gu-item">강북구</a>
-                <a href="/dobong/index.html" class="gu-item">도봉구</a>
-                <a href="/nowon/index.html" class="gu-item">노원구</a>
-                <a href="/seongdong/index.html" class="gu-item">성동구</a>
-                <a href="/gwangjin/index.html" class="gu-item">광진구</a>
-                <a href="/dongdaemun/index.html" class="gu-item">동대문구</a>
-                <a href="/yeongdeungpo/index.html" class="gu-item">영등포구</a>
-                <a href="/guro/index.html" class="gu-item">구로구</a>
-                <a href="/geumcheon/index.html" class="gu-item">금천구</a>
-                <a href="/yangcheon/index.html" class="gu-item">양천구</a>
-                <a href="/gangse/index.html" class="gu-item">강서구</a>
-                <a href="/dongjak/index.html" class="gu-item">동작구</a>
-                <a href="/gwanak/index.html" class="gu-item">관악구</a>
+            <!-- 1. 서울특별시 25개 자치구 -->
+            <div style="font-size:0.98rem; font-weight:800; margin:20px 0 10px; padding-left:8px; border-left:3px solid #e74c3c; color:#ff7675;">[ 서울특별시 25개 자치구 ]</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:8px;">
+                <div style="background:#161a25; border:1px solid #e74c3c; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seoul/index.html" style="color:#f1c40f; font-weight:bold; display:block;">★ 서울 전지역</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gangnam/index.html" style="color:#e1e3e8; font-weight:600; display:block;">강남구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seocho/index.html" style="color:#e1e3e8; font-weight:600; display:block;">서초구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/songpa/index.html" style="color:#e1e3e8; font-weight:600; display:block;">송파구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gangdong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">강동구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/mapo/index.html" style="color:#e1e3e8; font-weight:600; display:block;">마포구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/yongsan/index.html" style="color:#e1e3e8; font-weight:600; display:block;">용산구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seodaemun/index.html" style="color:#e1e3e8; font-weight:600; display:block;">서대문구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/eunpyeong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">은평구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/jongno/index.html" style="color:#e1e3e8; font-weight:600; display:block;">종로구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/junggu/index.html" style="color:#e1e3e8; font-weight:600; display:block;">중구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/jungnang/index.html" style="color:#e1e3e8; font-weight:600; display:block;">중랑구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seongbuk/index.html" style="color:#e1e3e8; font-weight:600; display:block;">성북구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gangbuk/index.html" style="color:#e1e3e8; font-weight:600; display:block;">강북구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/dobong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">도봉구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/nowon/index.html" style="color:#e1e3e8; font-weight:600; display:block;">노원구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seongdong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">성동구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gwangjin/index.html" style="color:#e1e3e8; font-weight:600; display:block;">광진구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/dongdaemun/index.html" style="color:#e1e3e8; font-weight:600; display:block;">동대문구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/yeongdeungpo/index.html" style="color:#e1e3e8; font-weight:600; display:block;">영등포구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/guro/index.html" style="color:#e1e3e8; font-weight:600; display:block;">구로구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/geumcheon/index.html" style="color:#e1e3e8; font-weight:600; display:block;">금천구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/yangcheon/index.html" style="color:#e1e3e8; font-weight:600; display:block;">양천구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gangse/index.html" style="color:#e1e3e8; font-weight:600; display:block;">강서구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/dongjak/index.html" style="color:#e1e3e8; font-weight:600; display:block;">동작구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gwanak/index.html" style="color:#e1e3e8; font-weight:600; display:block;">관악구</a></div>
             </div>
 
             <!-- 2. 인천광역시 -->
-            <div style="font-weight:bold; color:#3498db; margin:20px 0 8px 0; font-size:1.05rem;">[ 인천광역시 8개 구/군 & 세부 동 ]</div>
-            <div class="gu-grid">
-                <a href="/incheon_bupyeong/index.html" class="gu-item">인천 부평구</a>
-                <a href="/incheon_namdong/index.html" class="gu-item">인천 남동구</a>
-                <a href="/incheon_yeonsu/index.html" class="gu-item">인천 연수구(송도)</a>
-                <a href="/incheon_michuhol/index.html" class="gu-item">인천 미추홀구</a>
-                <a href="/incheon_seogu/index.html" class="gu-item">인천 서구(청라/검단)</a>
-                <a href="/incheon_gyeyang/index.html" class="gu-item">인천 계양구</a>
-                <a href="/incheon_junggu/index.html" class="gu-item">인천 중구(영종도)</a>
-                <a href="/incheon_donggu/index.html" class="gu-item">인천 동구</a>
+            <div style="font-size:0.98rem; font-weight:800; margin:20px 0 10px; padding-left:8px; border-left:3px solid #3498db; color:#74b9ff;">[ 인천광역시 8개 구/군 ]</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:8px;">
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_bupyeong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 부평구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_namdong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 남동구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_yeonsu/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 연수구(송도)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_michuhol/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 미추홀구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_seogu/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 서구(청라)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_gyeyang/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 계양구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_junggu/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 중구(영종도)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/incheon_donggu/index.html" style="color:#e1e3e8; font-weight:600; display:block;">인천 동구</a></div>
             </div>
 
             <!-- 3. 경기도 주요 시/구 -->
-            <div style="font-weight:bold; color:#2ecc71; margin:20px 0 8px 0; font-size:1.05rem;">[ 경기도 주요 시·구 & 세부 동 ]</div>
-            <div class="gu-grid">
-                <a href="/suwon/index.html" class="gu-item">수원시 전체</a>
-                <a href="/suwon_paldal/index.html" class="gu-item">수원 팔달구(인계동)</a>
-                <a href="/suwon_yeongtong/index.html" class="gu-item">수원 영통구(광교)</a>
-                <a href="/suwon_jangan/index.html" class="gu-item">수원 장안구</a>
-                <a href="/suwon_gwonseon/index.html" class="gu-item">수원 권선구</a>
-                
-                <a href="/seongnam/index.html" class="gu-item">성남시 전체</a>
-                <a href="/seongnam_bundang/index.html" class="gu-item">성남 분당구(판교)</a>
-                <a href="/seongnam_sujeong/index.html" class="gu-item">성남 수정구(위례)</a>
-                <a href="/seongnam_jungwon/index.html" class="gu-item">성남 중원구(모란)</a>
-                
-                <a href="/goyang/index.html" class="gu-item">고양시 전체</a>
-                <a href="/goyang_ilsandong/index.html" class="gu-item">고양 일산동구</a>
-                <a href="/goyang_ilsanseo/index.html" class="gu-item">고양 일산서구</a>
-                <a href="/goyang_deogyang/index.html" class="gu-item">고양 덕양구(삼송)</a>
-                
-                <a href="/yongin/index.html" class="gu-item">용인시 전체</a>
-                <a href="/yongin_suji/index.html" class="gu-item">용인 수지구(죽전)</a>
-                <a href="/yongin_giheung/index.html" class="gu-item">용인 기흥구(동백)</a>
-                <a href="/yongin_cheoin/index.html" class="gu-item">용인 처인구(역북)</a>
-                
-                <a href="/bucheon/index.html" class="gu-item">부천시(중동/상동)</a>
-                <a href="/hwaseong/index.html" class="gu-item">화성시(동탄1·2/병점)</a>
-                <a href="/pyeongtaek/index.html" class="gu-item">평택시(고덕/비전동)</a>
-                <a href="/siheung/index.html" class="gu-item">시흥시(배곧/정왕동)</a>
-                <a href="/gimpo/index.html" class="gu-item">김포시(구래/운양동)</a>
-                <a href="/paju/index.html" class="gu-item">파주시(운정/야당동)</a>
-                <a href="/namyangju/index.html" class="gu-item">남양주시(다산/별내)</a>
-                <a href="/uijeongbu/index.html" class="gu-item">의정부시(민락동)</a>
-                <a href="/hanam/index.html" class="gu-item">하남시(미사/감일)</a>
-                <a href="/gwangmyeong/index.html" class="gu-item">광명시(철산/일직)</a>
-                <a href="/anyang/index.html" class="gu-item">안양시(평촌/범계)</a>
-                <a href="/ansan/index.html" class="gu-item">안산시(중앙동/고잔동)</a>
-                <a href="/gunpo/index.html" class="gu-item">군포시(산본동)</a>
-                <a href="/guri/index.html" class="gu-item">구리시(수택동)</a>
-                <a href="/osan/index.html" class="gu-item">오산시(세교)</a>
-                <a href="/gwangju_gyeonggi/index.html" class="gu-item">경기 광주시</a>
-                <a href="/icheon/index.html" class="gu-item">이천시</a>
-                <a href="/yangju/index.html" class="gu-item">양주시(옥정)</a>
-                <a href="/uiwang/index.html" class="gu-item">의왕시</a>
-                <a href="/anseong/index.html" class="gu-item">안성시</a>
+            <div style="font-size:0.98rem; font-weight:800; margin:20px 0 10px; padding-left:8px; border-left:3px solid #2ecc71; color:#55efc4;">[ 경기도 주요 시·구 ]</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:8px;">
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/suwon/index.html" style="color:#e1e3e8; font-weight:600; display:block;">수원시 전체</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/suwon_paldal/index.html" style="color:#e1e3e8; font-weight:600; display:block;">수원 팔달구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/suwon_yeongtong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">수원 영통구(광교)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seongnam/index.html" style="color:#e1e3e8; font-weight:600; display:block;">성남시 전체</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/seongnam_bundang/index.html" style="color:#e1e3e8; font-weight:600; display:block;">성남 분당구(판교)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/goyang/index.html" style="color:#e1e3e8; font-weight:600; display:block;">고양시 전체</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/goyang_ilsandong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">고양 일산동구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/yongin/index.html" style="color:#e1e3e8; font-weight:600; display:block;">용인시 전체</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/yongin_suji/index.html" style="color:#e1e3e8; font-weight:600; display:block;">용인 수지구</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/bucheon/index.html" style="color:#e1e3e8; font-weight:600; display:block;">부천시</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/hwaseong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">화성시(동탄)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/pyeongtaek/index.html" style="color:#e1e3e8; font-weight:600; display:block;">평택시(고덕)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/siheung/index.html" style="color:#e1e3e8; font-weight:600; display:block;">시흥시(배곧)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gimpo/index.html" style="color:#e1e3e8; font-weight:600; display:block;">김포시(구래)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/paju/index.html" style="color:#e1e3e8; font-weight:600; display:block;">파주시(운정)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/namyangju/index.html" style="color:#e1e3e8; font-weight:600; display:block;">남양주시(다산)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/uijeongbu/index.html" style="color:#e1e3e8; font-weight:600; display:block;">의정부시</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/hanam/index.html" style="color:#e1e3e8; font-weight:600; display:block;">하남시(미사)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gwangmyeong/index.html" style="color:#e1e3e8; font-weight:600; display:block;">광명시(철산)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/anyang/index.html" style="color:#e1e3e8; font-weight:600; display:block;">안양시(평촌)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/ansan/index.html" style="color:#e1e3e8; font-weight:600; display:block;">안산시(중앙)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gunpo/index.html" style="color:#e1e3e8; font-weight:600; display:block;">군포시(산본)</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/guri/index.html" style="color:#e1e3e8; font-weight:600; display:block;">구리시</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/osan/index.html" style="color:#e1e3e8; font-weight:600; display:block;">오산시</a></div>
+                <div style="background:#161a25; border:1px solid #232938; padding:10px 6px; border-radius:6px; text-align:center;"><a href="/gwangju_gyeonggi/index.html" style="color:#e1e3e8; font-weight:600; display:block;">경기 광주시</a></div>
             </div>
         </div>
 """
 
-# 메인 index.html 과 seoul/index.html 에 삽입/치환
+# 타깃 파일 리스트 (필요 시 모든 서브페이지 폴더 추가 가능)
 target_files = ["index.html", "seoul/index.html"]
 
 for rel_path in target_files:
     if not os.path.exists(rel_path):
+        print(f"⚠ [{rel_path}] 파일이 존재하지 않아 건너뜁니다.")
         continue
     
     with open(rel_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # 기존 수도권 안내/자치구 영역이 있으면 교체, 없으면 푸터 바로 앞에 삽입
-    if '<div class="area-box">' in content:
-        content = re.sub(r'<div class="area-box">.*?</div>\s*</div>(?=\s*<footer>)', FULL_REGIONS_HTML.strip() + "\n    </div>", content, flags=re.DOTALL)
+    # 1) 기존 .area-box 영역이 있으면 해당 영역만 정확하게 교체
+    if '<div class="area-box"' in content:
+        content = re.sub(r'<div class="area-box".*?</div>\s*</div>(?=\s*</div>\s*<footer>|\s*<footer>)', 
+                         FULL_REGIONS_HTML.strip(), content, flags=re.DOTALL)
+    # 2) 서브페이지의 구 자치구 리스트 형태가 있을 경우 교체
     elif '<div class="gu-grid">' in content:
-        content = re.sub(r'<h2 class="section-title">.*?서울시 25개 자치구.*?</h2>\s*<div class="gu-grid">.*?</div>', FULL_REGIONS_HTML.strip(), content, flags=re.DOTALL)
+        content = re.sub(r'<div class="gu-grid">.*?</div>', FULL_REGIONS_HTML.strip(), content, flags=re.DOTALL)
+    # 3) 없을 경우 푸터 직전 container 닫는 태그 앞에 안전하게 삽입
     else:
-        content = re.sub(r'(</div>\s*<footer>)', rf'{FULL_REGIONS_HTML}\n    \1', content, flags=re.DOTALL)
+        content = re.sub(r'(\s*</div>\s*<footer>)', rf'\n{FULL_REGIONS_HTML}\n\1', content, flags=re.DOTALL)
 
     with open(rel_path, "w", encoding="utf-8") as f:
         f.write(content)
-    print(f"✔ [{rel_path}] 서울/경기/인천 전체 구·동 통합 네비게이션 적용 완료!")
-
+    print(f"✔ [{rel_path}] 수도권 통합 네비게이션 적용 완료!")

@@ -1,4 +1,5 @@
-﻿import os
+﻿# -*- coding: utf-8 -*-
+import os
 import re
 import random
 
@@ -42,21 +43,25 @@ def get_loc_name(rel_path):
         return f"{folder_kr} {file_kr}" if folder_kr != file_kr else folder_kr
 
 # ==============================================================================
-# 2. 마사지몽 5개 실제 제휴 업체 카드 템플릿
+# 2. 서브페이지 전용 5대 제휴 업체 템플릿 (출장마사지 & 홈타이 키워드 최적화)
 # ==============================================================================
-FIVE_VENDORS_HTML = """
-        <!-- 1번 업체: 기쁨조 테라피 -->
+VENDOR_TEMPLATES = [
+    # 기쁨조 테라피
+    """
         <div class="vendor-card">
-            <img src="/images/vendor1.jpg" alt="{loc} 기쁨조 테라피" class="vendor-img">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor1.jpg" alt="{loc} 출장마사지 기쁨조 테라피" class="vendor-img">
+                <div class="vendor-tag-float">👑 최우수 만족도 매장</div>
+            </div>
             <div class="vendor-body">
-                <div class="vendor-header">
-                    <div>
-                        <span class="vendor-badge">추천 01</span>
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
                         <span class="vendor-title">기쁨조 테라피</span>
                     </div>
-                    <div class="vendor-tagline">★ {loc} 전 지역 30분 내 신속 방문 보장</div>
+                    <div class="vendor-tagline">★ {loc} 전 지역 30분 내 신속 방문 출장마사지</div>
                 </div>
-                <div class="vendor-info">
+                <div class="info-grid">
                     <div class="info-row">
                         <div class="info-label">제공 코스</div>
                         <div class="info-content">시그니처 건식 타이, 감성 아로마 릴렉싱, 딥티슈 집중 케어</div>
@@ -66,47 +71,59 @@ FIVE_VENDORS_HTML = """
                         <div class="info-content">전문 자격 테라피스트 구성, 천연 에센셜 오일 사용, 맞춤 컨디셔닝</div>
                     </div>
                 </div>
-                <a href="tel:0507-1280-3223" class="vendor-call-btn">📞 전화 문의 : 0507-1280-3223</a>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3223" class="btn-call">📞 기쁨조 테라피 예약 : 0507-1280-3223</a>
+                </div>
             </div>
         </div>
-
-        <!-- 2번 업체: 한국미인 홈케어 -->
+    """,
+    # 한국미인 홈케어
+    """
         <div class="vendor-card">
-            <img src="/images/vendor2.jpg" alt="{loc} 한국미인 홈케어" class="vendor-img">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor2.jpg" alt="{loc} 출장마사지 한국미인 홈케어" class="vendor-img">
+                <div class="vendor-tag-float">✨ 야간/새벽 집중 힐링</div>
+            </div>
             <div class="vendor-body">
-                <div class="vendor-header">
-                    <div>
-                        <span class="vendor-badge gold">추천 02</span>
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
                         <span class="vendor-title">한국미인 홈케어</span>
                     </div>
-                    <div class="vendor-tagline">★ 24시간 연중무휴 안심 케어 & 피로회복 전문</div>
+                    <div class="vendor-tagline">★ {loc} 홈타이 & 직장인 피로회복 전문 출장케어</div>
                 </div>
-                <div class="vendor-info">
+                <div class="info-grid">
                     <div class="info-row">
                         <div class="info-label">제공 코스</div>
                         <div class="info-content">프리미엄 스웨디시, 림프 드레니쉬, 전신 바디 밸런싱 케어</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">매장 특징</div>
-                        <div class="info-content">24시간 운영, 직장인 피로회복 전문, 정찰제 시스템</div>
+                        <div class="info-content">24시간 운영, 투명한 정찰제 요금 시스템, 철저한 후불제</div>
                     </div>
                 </div>
-                <a href="tel:0507-1280-3303" class="vendor-call-btn">📞 전화 문의 : 0507-1280-3303</a>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3303" class="btn-call">📞 한국미인 홈케어 예약 : 0507-1280-3303</a>
+                </div>
             </div>
         </div>
-
-        <!-- 3번 업체: 미인클럽 스파 & 테라피 -->
+    """,
+    # 미인클럽 스파 & 테라피
+    """
         <div class="vendor-card">
-            <img src="/images/vendor3.jpg" alt="{loc} 미인클럽 스파 & 테라피" class="vendor-img">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor3.jpg" alt="{loc} 출장마사지 미인클럽 스파" class="vendor-img">
+                <div class="vendor-tag-float">💎 호텔식 VIP 프로그램</div>
+            </div>
             <div class="vendor-body">
-                <div class="vendor-header">
-                    <div>
-                        <span class="vendor-badge blue">추천 03</span>
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
                         <span class="vendor-title">미인클럽 스파 & 테라피</span>
                     </div>
-                    <div class="vendor-tagline">★ 철저한 위생 관리 & 1:1 맞춤형 힐링 프로그램</div>
+                    <div class="vendor-tagline">★ 1회용 청결 소독용품 완비 & {loc} 감성 힐링 스파</div>
                 </div>
-                <div class="vendor-info">
+                <div class="info-grid">
                     <div class="info-row">
                         <div class="info-label">제공 코스</div>
                         <div class="info-content">타이 + 아로마 스페셜 콤보 코스 (90분/120분)</div>
@@ -116,67 +133,96 @@ FIVE_VENDORS_HTML = """
                         <div class="info-content">위생 소독 관리 철저, 일대일 맞춤 힐링 프로그램 지원</div>
                     </div>
                 </div>
-                <a href="tel:0507-1280-3193" class="vendor-call-btn">📞 전화 문의 : 0507-1280-3193</a>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3193" class="btn-call">📞 미인클럽 테라피 예약 : 0507-1280-3193</a>
+                </div>
             </div>
         </div>
-
-        <!-- 4번 업체: 퀸즈홈테라피 -->
+    """,
+    # 퀸즈홈테라피
+    """
         <div class="vendor-card">
-            <img src="/images/vendor4.jpg" alt="{loc} 퀸즈홈테라피" class="vendor-img">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor4.jpg" alt="{loc} 출장마사지 퀸즈홈테라피" class="vendor-img">
+                <div class="vendor-tag-float">🌿 감성 바디 스트레칭</div>
+            </div>
             <div class="vendor-body">
-                <div class="vendor-header">
-                    <div>
-                        <span class="vendor-badge purple">추천 04</span>
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
                         <span class="vendor-title">퀸즈홈테라피</span>
                     </div>
-                    <div class="vendor-tagline">★ 프리미엄 힐링 솔루션 & 신속한 1:1 매칭 시스템</div>
+                    <div class="vendor-tagline">★ {loc} 전지역 1:1 방문 홈타이 & 섬세한 압 조절</div>
                 </div>
-                <div class="vendor-info">
+                <div class="info-grid">
                     <div class="info-row">
                         <div class="info-label">제공 코스</div>
                         <div class="info-content">감성 로드 스웨디시, 전신 릴렉싱 스트레칭, 스페셜 풋 케어</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">매장 특징</div>
-                        <div class="info-content">프리미엄 힐링 솔루션 제공, 신속한 1:1 매칭 시스템</div>
+                        <div class="info-content">프리미엄 힐링 솔루션 제공, 신속한 1:1 테라피스트 배정</div>
                     </div>
                 </div>
-                <a href="tel:0507-1280-3334" class="vendor-call-btn">📞 전화 문의 : 0507-1280-3334</a>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3334" class="btn-call">📞 퀸즈홈테라피 예약 : 0507-1280-3334</a>
+                </div>
             </div>
         </div>
-
-        <!-- 5번 업체: 동탄미씨홈케어 -->
+    """,
+    # 한국골든테라피
+    """
         <div class="vendor-card">
-            <img src="/images/vendor5.jpg" alt="{loc} 동탄미씨홈케어" class="vendor-img">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor5.jpg" alt="{loc} 출장마사지 한국골든테라피" class="vendor-img">
+                <div class="vendor-tag-float">🏷️ 가성비 정찰제 1위</div>
+            </div>
             <div class="vendor-body">
-                <div class="vendor-header">
-                    <div>
-                        <span class="vendor-badge green">추천 05</span>
-                        <span class="vendor-title">동탄미씨홈케어</span>
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
+                        <span class="vendor-title">한국골든테라피</span>
                     </div>
-                    <div class="vendor-tagline">★ 합리적인 정찰제 가격 & 친절한 1:1 바디 상담</div>
+                    <div class="vendor-tagline">★ {loc} 정찰제 출장안마 & 친절한 1:1 바디 케어</div>
                 </div>
-                <div class="vendor-info">
+                <div class="info-grid">
                     <div class="info-row">
                         <div class="info-label">제공 코스</div>
                         <div class="info-content">오리지널 정통 타이, 등/어깨 집중 케어, 전신 아로마 힐링</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">매장 특징</div>
-                        <div class="info-content">합리적인 가격 구성, 친절한 바디 케어 상담</div>
+                        <div class="info-content">합리적인 가격 구성, 친절한 바디 케어 상담, 단골 재이용률 상위</div>
                     </div>
                 </div>
-                <a href="tel:0507-1280-3302" class="vendor-call-btn">📞 전화 문의 : 0507-1280-3302</a>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3361" class="btn-call">📞 한국골든테라피 예약 : 0507-1280-3361</a>
+                </div>
             </div>
         </div>
-"""
+    """
+]
+
+def build_random_vendors_html(loc_name):
+    shuffled_templates = VENDOR_TEMPLATES.copy()
+    random.shuffle(shuffled_templates)
+    
+    html_pieces = []
+    for idx, tmpl in enumerate(shuffled_templates, start=1):
+        rank_label = f"추천 {idx:02d}"
+        html_pieces.append(tmpl.format(loc=loc_name, rank=rank_label))
+        
+    return "\n".join(html_pieces)
 
 # ==============================================================================
-# 3. 마사지몽 브랜드 치환 및 5개 업체 일괄 적용
+# 3. 서브페이지 일괄 처리 실행
 # ==============================================================================
 updated_files = 0
 
 for root, dirs, files in os.walk("."):
+    if any(part.startswith(".") for part in root.split(os.sep)):
+        continue
+
     for file in files:
         if not file.endswith(".html"):
             continue
@@ -187,26 +233,33 @@ for root, dirs, files in os.walk("."):
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # 스파루나 -> 마사지몽 브랜드명 복구
-        content = content.replace("스파루나", "마사지몽")
-        content = content.replace("SpaLuna", "MassageMong")
-        content = content.replace("spaluna", "massagemong")
-        
-        # 하위 지역 페이지 업체 카드 5개 일괄 적용
-        if rel_path != "index.html" and '<div class="vendor-card">' in content:
-            loc_name = get_loc_name(rel_path)
-            content = re.sub(r'<h2 class="section-title">.*?</h2>', f'<h2 class="section-title">{loc_name} 추천 테라피 매장 TOP 5</h2>', content, count=1)
-            
-            vendors_replacement = FIVE_VENDORS_HTML.format(loc=loc_name)
-            pattern = re.compile(r'<div class="vendor-card">.*?</div>\s*</div>(?=\s*(?:<h2|<div class="gu-grid"|</div>\s*<footer>|<footer>))', re.DOTALL)
-            
-            if pattern.search(content):
-                content = pattern.sub(vendors_replacement.strip(), content)
-            else:
-                content = re.sub(r'(<div class="vendor-card">.*</div>\s*</a>\s*</div>)', vendors_replacement.strip(), content, flags=re.DOTALL)
-            
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(content)
-        updated_files += 1
+        # 브랜드명 통일 (스파루나/마사지몽 잔재 제거 -> 테라피365)
+        content = content.replace("스파루나", "테라피365").replace("마사지몽", "테라피365")
+        content = content.replace("SpaLuna", "Theraphy365").replace("MassageMong", "Theraphy365")
+        content = content.replace("spaluna", "theraphy365").replace("massagemong", "theraphy365")
 
-print(f"🎉 마사지몽: 총 {updated_files}개 페이지에 마사지몽 브랜드 복구 및 5개 업체가 완벽하게 적용되었습니다.")
+        # 서브페이지인 경우: 업체 카드 교체 및 지역 출장마사지 키워드 적용
+        if rel_path != "index.html" and '<div class="vendor-card"' in content or '<div class="vendor-card">' in content:
+            loc_name = get_loc_name(rel_path)
+            
+            # 섹션 타이틀 변경
+            content = re.sub(
+                r'<h2[^>]*>.*?TOP 5.*?</h2>', 
+                f'<h2>{loc_name} 출장마사지 & 홈타이 추천 제휴처 TOP 5</h2>', 
+                content, count=1, flags=re.IGNORECASE
+            )
+            
+            # 모든 기존 vendor-card 추출 후 새 셔플 카드로 교체
+            vendors_replacement = build_random_vendors_html(loc_name)
+            content = re.sub(
+                r'(<div class="vendor-card">[\s\S]*?</div>\s*</div>)(?=\s*<!--|\s*<div class="section-header"|\s*<div class="map-section-card")', 
+                vendors_replacement.strip(), 
+                content, count=1
+            )
+            
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            updated_files += 1
+            print(f"✔ [{rel_path}] {loc_name} 출장마사지 키워드 및 제휴처 셔플 완료")
+
+print(f"\n🎉 총 {updated_files}개 서브페이지에 '지역명+출장마사지' 키워드와 5개 업체가 완벽히 적용되었습니다!")

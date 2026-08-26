@@ -1,152 +1,277 @@
+# -*- coding: utf-8 -*-
 import os
+import re
+import random
 
-# 생성할 경기/인천 지역 구조 (영문폴더명: (한글명, [하위 대표 동/읍/면]))
-NEW_REGIONS = {
-    # [인천광역시]
-    "incheon_bupyeong": ("인천 부평구", ["bupyeong", "sanggok", "cheongcheon", "galsan"]),
-    "incheon_namdong": ("인천 남동구", ["guwol", "ganseok", "nonhyeon", "mansu"]),
-    "incheon_yeonsu": ("인천 연수구", ["songdo", "yeonsu", "dongchun", "cheonghak"]),
-    "incheon_michuhol": ("인천 미추홀구", ["juan", "yonghyeon", "dohwa", "sungui"]),
-    "incheon_seogu": ("인천 서구", ["cheongna", "geomdan", "yeonhui", "gajeong"]),
-    "incheon_gyeyang": ("인천 계양구", ["gyeyang", "galsan", "jakjeon", "hyoseong"]),
-    "incheon_junggu": ("인천 중구", ["yeongjong", "unseo", "sinpo"]),
-    
-    # [경기도 주요 시/군]
-    "suwon": ("수원시", ["ingye", "gwonseon", "yeongtong", "jangan", "paldal"]),
-    "seongnam": ("성남시", ["bundang", "pangyo", "sujeong", "jungwon", "seohyeon", "yatap"]),
-    "goyang": ("고양시", ["ilsan", "deogyang", "baekseok", "madu", "hwajeong"]),
-    "yongin": ("용인시", ["suji", "giheung", "cheoin", "jookjeon", "dongbaek"]),
-    "bucheon": ("부천시", ["jungdong", "sangdong", "wonmi", "sosa", "ojeong"]),
-    "ansan": ("안산시", ["danwon", "sangnok", "gojan", "jungang"]),
-    "anyang": ("안양시", ["pyeongchon", "beomgye", "manan", "dongan"]),
-    "hwaseong": ("화성시", ["dongtan", "hyangnam", "bongdam", "byeongjeom"]),
-    "pyeongtaek": ("평택시", ["godeok", "songtan", "anjeong", "bijeon"]),
-    "siheung": ("시흥시", ["baegot", "jeongwang", "eunhaeng", "mokgam"]),
-    "gimpo": ("김포시", ["gurae", "pungmu", "sau", "unyang"]),
-    "paju": ("파주시", ["unjeong", "geumchon", "munsan", "gyoha"]),
-    "uijeongbu": ("의정부시", ["uijeongbu_dong", "howon", "singok", "minrak"]),
-    "namyangju": ("남양주시", ["dasang", "byeolnae", "pyeongnae", "jinjeop"]),
-    "hanam": ("하남시", ["misa", "wirye", "deokpung", "sinjang"]),
-    "gwangmyeong": ("광명시", ["cheolsan", "soha", "gwangmyeong_dong", "iljik"]),
-    "gunpo": ("군포시", ["sanbon", "geumjeong", "dang-dong"]),
-    "guri": ("구리시", ["sutaek", "inmae", "galmae", "gyomun"]),
-    "gwangju_gyeonggi": ("경기 광주시", ["gyeongan", "taejeon", "opocheup"]),
-    "icheon": ("이천시", ["changjeon", "jeungpo", "bubal"]),
-    "osan": ("오산시", ["won-dong", "궐동", "세교"]),
-    "anseong": ("안성시", ["daedeok", "gongdo"]),
-    "uiwang": ("의왕시", ["poil", "naeson", "gojeon"]),
-    "yangju": ("양주시", ["okjeong", "goeup", "deokgye"])
+# ==============================================================================
+# 1. 영문 폴더/파일명 -> 한글 지역명 매핑
+# ==============================================================================
+NAME_MAP = {
+    "seoul": "서울", "gangnam": "강남구", "seocho": "서초구", "songpa": "송파구", "gangdong": "강동구",
+    "mapo": "마포구", "yongsan": "용산구", "seodaemun": "서대문구", "eunpyeong": "은평구",
+    "jongno": "종로구", "junggu": "중구", "jungnang": "중랑구", "seongbuk": "성북구",
+    "gangbuk": "강북구", "dobong": "도봉구", "nowon": "노원구", "seongdong": "성동구",
+    "gwangjin": "광진구", "dongdaemun": "동대문구", "yeongdeungpo": "영등포구",
+    "guro": "구로구", "geumcheon": "금천구", "yangcheon": "양천구", "gangse": "강서구",
+    "gangseo": "강서구", "dongjak": "동작구", "gwanak": "관악구",
+    "incheon_bupyeong": "인천 부평구", "incheon_namdong": "인천 남동구", "incheon_yeonsu": "인천 연수구",
+    "incheon_michuhol": "인천 미추홀구", "incheon_seogu": "인천 서구", "incheon_gyeyang": "인천 계양구",
+    "incheon_junggu": "인천 중구", "incheon_donggu": "인천 동구",
+    "suwon": "수원시", "suwon_paldal": "수원 팔달구", "suwon_yeongtong": "수원 영통구", "suwon_jangan": "수원 장안구", "suwon_gwonseon": "수원 권선구",
+    "seongnam": "성남시", "seongnam_bundang": "성남 분당구", "seongnam_sujeong": "성남 수정구", "seongnam_jungwon": "성남 중원구",
+    "goyang": "고양시", "goyang_ilsandong": "고양 일산동구", "goyang_ilsanseo": "고양 일산서구", "goyang_deogyang": "고양 덕양구",
+    "yongin": "용인시", "yongin_suji": "용인 수지구", "yongin_giheung": "용인 기흥구", "yongin_cheoin": "용인 처인구",
+    "anyang": "안양시", "anyang_dongan": "안양 동안구", "anyang_manan": "안양 만안구",
+    "ansan": "안산시", "ansan_danwon": "안산 단원구", "ansan_sangnok": "안산 상록구",
+    "bucheon": "부천시", "hwaseong": "화성시", "pyeongtaek": "평택시", "siheung": "시흥시",
+    "gimpo": "김포시", "paju": "파주시", "namyangju": "남양주시", "uijeongbu": "의정부시",
+    "hanam": "하남시", "gwangmyeong": "광명시", "gunpo": "군포시", "guri": "구리시",
+    "osan": "오산시", "gwangju_gyeonggi": "경기 광주시", "icheon": "이천시", "yangju": "양주시",
+    "uiwang": "의왕시", "anseong": "안성시"
 }
 
-# 기본 템플릿 코드
-HTML_TEMPLATE = """<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title}</title>
-    <meta name="description" content="{desc}">
-    <meta name="keywords" content="{keywords}">
-    <meta name="robots" content="index, follow">
-    <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans KR', -apple-system, sans-serif; }}
-        body {{ background-color: #0f1117; color: #e1e3e8; line-height: 1.6; padding-bottom: 40px; }}
-        a {{ text-decoration: none; color: inherit; }}
-        header {{ background: #161821; padding: 18px 20px; text-align: center; border-bottom: 2px solid #e74c3c; position: sticky; top: 0; z-index: 100; }}
-        header h1 {{ font-size: 1.35rem; color: #ffffff; font-weight: 700; }}
-        header h1 span {{ color: #e74c3c; }}
-        .hero-banner {{ background: linear-gradient(rgba(15, 17, 23, 0.75), rgba(15, 17, 23, 0.88)), url('/images/main-banner.jpg') center/cover; padding: 50px 20px; text-align: center; border-bottom: 1px solid #2a2d37; }}
-        .hero-banner h2 {{ font-size: 1.6rem; color: #fff; margin-bottom: 10px; }}
-        .hero-banner p {{ font-size: 0.95rem; color: #f1c40f; }}
-        .container {{ max-width: 900px; margin: 0 auto; padding: 20px 15px; }}
-        .nav-bar {{ display: flex; gap: 10px; margin-bottom: 20px; }}
-        .home-btn {{ background: #2a2d37; color: #fff; padding: 8px 15px; border-radius: 5px; font-size: 0.85rem; }}
-        .section-title {{ font-size: 1.25rem; color: #ffffff; margin: 25px 0 18px 0; border-left: 4px solid #e74c3c; padding-left: 10px; font-weight: 700; }}
-        .vendor-card {{ background: #161821; border: 1px solid #2a2d37; border-radius: 12px; overflow: hidden; margin-bottom: 25px; }}
-        .vendor-img {{ width: 100%; height: 220px; object-fit: cover; }}
-        .vendor-body {{ padding: 20px; }}
-        .vendor-header {{ display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2a2d37; padding-bottom: 12px; margin-bottom: 15px; flex-wrap: wrap; gap: 8px; }}
-        .vendor-badge {{ background: #e74c3c; color: #fff; font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 4px; }}
-        .vendor-title {{ font-size: 1.2rem; color: #ffffff; font-weight: bold; }}
-        .vendor-tagline {{ color: #2ecc71; font-size: 0.88rem; font-weight: 600; width: 100%; margin-top: 4px; }}
-        .vendor-info {{ margin-bottom: 18px; }}
-        .info-row {{ display: flex; margin-bottom: 8px; font-size: 0.92rem; }}
-        .info-label {{ width: 95px; color: #f1c40f; font-weight: bold; flex-shrink: 0; }}
-        .info-content {{ color: #bbbfca; }}
-        .vendor-call-btn {{ display: block; text-align: center; background: linear-gradient(135deg, #e74c3c, #c0392b); color: #ffffff; font-weight: bold; padding: 13px; border-radius: 8px; font-size: 1rem; }}
-        footer {{ text-align: center; padding: 25px 20px; font-size: 0.8rem; color: #7f8c8d; border-top: 1px solid #2a2d37; margin-top: 20px; }}
-    </style>
-</head>
-<body>
-    <header>
-        <h1>{header_title} <span>프리미엄 24시 방문 케어</span></h1>
-    </header>
-    <div class="hero-banner">
-        <h2>{header_title} 맞춤 프라이빗 힐링 서비스</h2>
-        <p>계신 곳 어디든 30분 내 신속 방문 테라피 안내</p>
-    </div>
-    <div class="container">
-        <div class="nav-bar">
-            <a href="../index.html" class="home-btn">🏠 전체 메인</a>
-            <a href="index.html" class="home-btn">📍 {header_title} 메인</a>
-        </div>
-        <h2 class="section-title">{header_title} 추천 테라피 매장</h2>
+def get_loc_name(rel_path):
+    parts = rel_path.replace("\\", "/").split("/")
+    if len(parts) == 2 and parts[1] == "index.html":
+        folder = parts[0]
+        return NAME_MAP.get(folder, folder.capitalize())
+    else:
+        folder = parts[0]
+        file_name = parts[-1].replace(".html", "")
+        folder_kr = NAME_MAP.get(folder, folder.capitalize())
+        file_kr = NAME_MAP.get(file_name, file_name.capitalize())
+        return f"{folder_kr} {file_kr}" if folder_kr != file_kr else folder_kr
+
+# ==============================================================================
+# 2. 서브페이지 전용 5대 제휴 업체 템플릿 (출장마사지 & 홈타이 키워드 최적화)
+# ==============================================================================
+VENDOR_TEMPLATES = [
+    # 기쁨조 테라피
+    """
         <div class="vendor-card">
-            <img src="/images/vendor1.jpg" alt="{header_title} 테라피" class="vendor-img">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor1.jpg" alt="{loc} 출장마사지 기쁨조 테라피" class="vendor-img">
+                <div class="vendor-tag-float">👑 최우수 만족도 매장</div>
+            </div>
             <div class="vendor-body">
-                <div class="vendor-header">
-                    <div>
-                        <span class="vendor-badge">추천 01</span>
-                        <span class="vendor-title">마사지몽 프리미엄 케어</span>
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
+                        <span class="vendor-title">기쁨조 테라피</span>
                     </div>
-                    <div class="vendor-tagline">★ {header_title} 전 지역 신속 배정</div>
+                    <div class="vendor-tagline">★ {loc} 전 지역 30분 내 신속 방문 출장마사지</div>
                 </div>
-                <div class="vendor-info">
+                <div class="info-grid">
                     <div class="info-row">
                         <div class="info-label">제공 코스</div>
-                        <div class="info-content">시그니처 타이, 프리미엄 아로마, 림프 순환 케어</div>
+                        <div class="info-content">시그니처 건식 타이, 감성 아로마 릴렉싱, 딥티슈 집중 케어</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">매장 특징</div>
-                        <div class="info-content">24시간 운영, 100% 후불제 시스템, 철저한 위생 관리</div>
+                        <div class="info-content">전문 자격 테라피스트 구성, 천연 에센셜 오일 사용, 맞춤 컨디셔닝</div>
                     </div>
                 </div>
-                <a href="tel:0507-1280-3338" class="vendor-call-btn">📞 전화 문의 : 0507-1280-3338</a>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3223" class="btn-call">📞 기쁨조 테라피 예약 : 0507-1280-3223</a>
+                </div>
             </div>
         </div>
-    </div>
-    <footer>
-        <p>© {header_title} 프리미엄 테라피 안내. All rights reserved.</p>
-    </footer>
-</body>
-</html>
-"""
+    """,
+    # 한국미인 홈케어
+    """
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor2.jpg" alt="{loc} 출장마사지 한국미인 홈케어" class="vendor-img">
+                <div class="vendor-tag-float">✨ 야간/새벽 집중 힐링</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
+                        <span class="vendor-title">한국미인 홈케어</span>
+                    </div>
+                    <div class="vendor-tagline">★ {loc} 홈타이 & 직장인 피로회복 전문 출장케어</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">프리미엄 스웨디시, 림프 드레니쉬, 전신 바디 밸런싱 케어</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">24시간 운영, 투명한 정찰제 요금 시스템, 철저한 후불제</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3303" class="btn-call">📞 한국미인 홈케어 예약 : 0507-1280-3303</a>
+                </div>
+            </div>
+        </div>
+    """,
+    # 미인클럽 스파 & 테라피
+    """
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor3.jpg" alt="{loc} 출장마사지 미인클럽 스파" class="vendor-img">
+                <div class="vendor-tag-float">💎 호텔식 VIP 프로그램</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
+                        <span class="vendor-title">미인클럽 스파 & 테라피</span>
+                    </div>
+                    <div class="vendor-tagline">★ 1회용 청결 소독용품 완비 & {loc} 감성 힐링 스파</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">타이 + 아로마 스페셜 콤보 코스 (90분/120분)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">위생 소독 관리 철저, 일대일 맞춤 힐링 프로그램 지원</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3193" class="btn-call">📞 미인클럽 테라피 예약 : 0507-1280-3193</a>
+                </div>
+            </div>
+        </div>
+    """,
+    # 퀸즈홈테라피
+    """
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor4.jpg" alt="{loc} 출장마사지 퀸즈홈테라피" class="vendor-img">
+                <div class="vendor-tag-float">🌿 감성 바디 스트레칭</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
+                        <span class="vendor-title">퀸즈홈테라피</span>
+                    </div>
+                    <div class="vendor-tagline">★ {loc} 전지역 1:1 방문 홈타이 & 섬세한 압 조절</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">감성 로드 스웨디시, 전신 릴렉싱 스트레칭, 스페셜 풋 케어</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">프리미엄 힐링 솔루션 제공, 신속한 1:1 테라피스트 배정</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3334" class="btn-call">📞 퀸즈홈테라피 예약 : 0507-1280-3334</a>
+                </div>
+            </div>
+        </div>
+    """,
+    # 한국골든테라피
+    """
+        <div class="vendor-card">
+            <div class="vendor-thumb-wrap">
+                <img src="/images/vendor5.jpg" alt="{loc} 출장마사지 한국골든테라피" class="vendor-img">
+                <div class="vendor-tag-float">🏷️ 가성비 정찰제 1위</div>
+            </div>
+            <div class="vendor-body">
+                <div class="vendor-header-flex">
+                    <div class="vendor-title-group">
+                        <span class="vendor-rank">{rank}</span>
+                        <span class="vendor-title">한국골든테라피</span>
+                    </div>
+                    <div class="vendor-tagline">★ {loc} 정찰제 출장안마 & 친절한 1:1 바디 케어</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">제공 코스</div>
+                        <div class="info-content">오리지널 정통 타이, 등/어깨 집중 케어, 전신 아로마 힐링</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">매장 특징</div>
+                        <div class="info-content">합리적인 가격 구성, 친절한 바디 케어 상담, 단골 재이용률 상위</div>
+                    </div>
+                </div>
+                <div class="vendor-btn-wrap">
+                    <a href="tel:0507-1280-3361" class="btn-call">📞 한국골든테라피 예약 : 0507-1280-3361</a>
+                </div>
+            </div>
+        </div>
+    """
+]
 
-count = 0
-for folder, (kr_name, sub_dongs) in NEW_REGIONS.items():
-    os.makedirs(folder, exist_ok=True)
+def build_random_vendors_html(loc_name):
+    shuffled_templates = VENDOR_TEMPLATES.copy()
+    random.shuffle(shuffled_templates)
     
-    # 1. 구/시 메인 index.html 생성
-    index_path = os.path.join(folder, "index.html")
-    with open(index_path, "w", encoding="utf-8") as f:
-        f.write(HTML_TEMPLATE.format(
-            title=f"{kr_name} 출장 마사지 & 24시 프리미엄 홈타이 | 마사지몽",
-            desc=f"{kr_name} 전 지역 24시 출장 마사지 및 홈타이 추천. 아로마, 스웨디시 힐링 케어 안내.",
-            keywords=f"{kr_name} 출장 마사지, {kr_name} 홈타이, 24시 테라피",
-            header_title=kr_name
-        ))
-    count += 1
+    html_pieces = []
+    for idx, tmpl in enumerate(shuffled_templates, start=1):
+        rank_label = f"추천 {idx:02d}"
+        html_pieces.append(tmpl.format(loc=loc_name, rank=rank_label))
+        
+    return "\n".join(html_pieces)
 
-    # 2. 하위 동별 html 파일 생성
-    for dong in sub_dongs:
-        dong_path = os.path.join(folder, f"{dong}.html")
-        with open(dong_path, "w", encoding="utf-8") as f:
-            f.write(HTML_TEMPLATE.format(
-                title=f"{kr_name} 출장 마사지 & 24시 홈타이 | 마사지몽",
-                desc=f"{kr_name} 인근 24시간 신속 방문 힐링 테라피 안내.",
-                keywords=f"{kr_name} 출장 마사지, {kr_name} 홈케어",
-                header_title=f"{kr_name}"
-            ))
-        count += 1
+# ==============================================================================
+# 3. 서브페이지 일괄 처리 실행
+# ==============================================================================
+updated_files = 0
 
-print(f"🎉 경기/인천 지역 {len(NEW_REGIONS)}개 구역, 총 {count}개의 HTML 파일이 자동 생성되었습니다!")
+for root, dirs, files in os.walk("."):
+    if any(part.startswith(".") for part in root.split(os.sep)):
+        continue
+
+    for file in files:
+        if not file.endswith(".html"):
+            continue
+        
+        file_path = os.path.join(root, file)
+        rel_path = os.path.relpath(file_path, ".").replace("\\", "/")
+        
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # 브랜드명 통일 (스파루나/마사지몽 잔재 제거 -> 테라피365)
+        content = content.replace("스파루나", "테라피365").replace("마사지몽", "테라피365")
+        content = content.replace("SpaLuna", "Theraphy365").replace("MassageMong", "Theraphy365")
+        content = content.replace("spaluna", "theraphy365").replace("massagemong", "theraphy365")
+
+        # 서브페이지인 경우만 엄격하게 실행 (메인 index.html 절대 보호)
+        if rel_path != "index.html" and "vendor-card" in content:
+            loc_name = get_loc_name(rel_path)
+            
+            # 1. 섹션 헤더 타이틀 변경
+            content = re.sub(
+                r'<h2>(?:테라피365 엄선 제휴 매장 TOP 5|.*?추천.*?TOP 5.*?)</h2>', 
+                f'<h2>{loc_name} 출장마사지 & 홈타이 추천 제휴처 TOP 5</h2>', 
+                content, count=1, flags=re.IGNORECASE
+            )
+            
+            # 2. 모든 기존 vendor-card 블록을 안전하게 찾아 교체
+            vendors_replacement = build_random_vendors_html(loc_name)
+            
+            # 첫 번째 vendor-card 시작부터 마지막 vendor-card 끝까지 영역 교체
+            first_idx = content.find('<div class="vendor-card">')
+            if first_idx != -1:
+                last_idx = content.rfind('</div>\n        </div>\n\n        <!-- 2.')
+                if last_idx == -1:
+                    last_idx = content.rfind('</div>\n        </div>\n\n        <!--')
+                if last_idx == -1:
+                    # 정규식 백업 매칭
+                    content = re.sub(
+                        r'(<div class="vendor-card">[\s\S]*?</div>\s*</div>)(?=\s*<!--\s*2\.|\s*<div class="section-header")',
+                        vendors_replacement.strip(),
+                        content, count=1
+                    )
+                else:
+                    end_idx = last_idx + len('</div>\n        </div>')
+                    content = content[:first_idx] + vendors_replacement.strip() + content[end_idx:]
+            
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            updated_files += 1
+            print(f"✔ [{rel_path}] {loc_name} 출장마사지 키워드 및 제휴처 셔플 완료")
+
+print(f"\n🎉 총 {updated_files}개 서브페이지에 '지역명+출장마사지' 키워드와 5개 업체가 완벽히 적용되었습니다!")
