@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import os
 import re
 import random
@@ -231,7 +231,7 @@ for root, dirs, files in os.walk("."):
         file_path = os.path.join(root, file)
         rel_path = os.path.relpath(file_path, ".").replace("\\", "/")
         
-        # 메인 index.html은 완벽 제외 (출장마사지 키워드 절대 차단 유지)
+        # 메인 index.html은 완벽 제외
         if rel_path == "index.html":
             continue
         
@@ -275,11 +275,4 @@ for root, dirs, files in os.walk("."):
         count += 1
         print(f"✔ [{rel_path}] -> {loc_name} 메타 키워드 최적화 완료")
 
-print(f"\n🎉 총 {updated_files}개 서브페이지에 '지역명+출장마사지' 키워드와 5개 업체가 완벽히 적용되었습니다!")
-
-# 실행 및 깃허브 배포
-python update_seo_keywords_theraphy365.py
-python generate_seo.py
-git add .
-git commit -m "테라피365 전 구/동 페이지 '출장마사지' 핵심 키워드 최우선 배치 및 배포"
-git push
+print(f"\n🎉 총 {count}개 서브페이지에 '지역명+출장마사지' 핵심 키워드가 포함된 차별화 30종 패턴이 완벽하게 적용되었습니다.")
