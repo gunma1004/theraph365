@@ -12,40 +12,45 @@ PHOTO_ID_MAPPING = {
 }
 
 count = 0
+current_dir = os.path.abspath(".")
 
-for root, dirs, files in os.walk("."):
+for root, dirs, files in os.walk(current_dir):
     # 숨김 폴더(.git 등) 제외
     if any(part.startswith(".") for part in root.split(os.sep)):
         continue
 
     for file in files:
-        if file.endswith(".html"):
-            file_path = os.path.join(root, file)
-            rel_path = os.path.relpath(file_path, ".").replace("\\", "/")
+        if not file.endswith(".html"):
+            continue
 
-            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                content = f.read()
+        file_path = os.path.join(root, file)
+        rel_path = os.path.relpath(file_path, current_dir).replace("\\", "/")
 
-            new_content = content
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
 
-            # 1. 히어로 배너 배경 이미지 Unsplash URL 정규식 치환
-            new_content = re.sub(
-                r'https://images\.unsplash\.com/photo-[0-9a-f\-]+\?[^"\'\)\s]+',
-                lambda m: next((local for pid, local in PHOTO_ID_MAPPING.items() if pid in m.group(0)), "/images/main-banner.jpg"),
-                new_content
-            )
+        new_content = content
 
-            # 2. 히어로 배너 CSS 배경 기본값 보정
-            new_content = re.sub(
-                r'url\([\'"]?/images/vendor[0-9]\.jpg[\'"]?\)',
-                "url('/images/main-banner.jpg')",
-                new_content
-            )
+        # 1. Unsplash 이미지 URL 정규식 치환 (쿼리스트링 및 파라미터 전체 포함)
+        new_content = re.sub(
+            r'https://images\.unsplash\.com/photo-[0-9a-zA-Z\-]+(\?[^"\'\)\s]*)?',
+            lambda m: next((local for pid, local in PHOTO_ID_MAPPING.items() if pid in m.group(0)), "/images/main-banner.jpg"),
+            new_content
+        )
 
-            if new_content != content:
-                with open(file_path, "w", encoding="utf-8") as f:
-                    f.write(new_content)
-                count += 1
-                print(f"✔ [{rel_path}] 로컬 이미지 경로 치환 완료")
+        # 2. 히어로 배너 영역의 CSS inline 배경 이미지 기본값 보정
+        new_content = re.sub(
+            r'style=["\'][^"\']*background(-image)?:\s*url\([\'"]?/images/vendor[0-9]\.jpg[\'"]?\)[^"\']*["\']',
+            'style="background-image: url(\'/images/main-banner.jpg\');"',
+            new_content,
+            flags=re.IGNORECASE
+        )
 
-print(f"\n🎉 총 {count}개의 HTML 파일 이미지 경로가 성공적으로 변경되었습니다!")
+        # 3. 변경사항이 있는 경우 파일 덮어쓰기
+        if new_content != content:
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+            count += 1
+            print(f"✔ [{rel_path}] 로컬 이미지 경로 치환 완료")
+
+print(f"\n🎉 총 {count}개의 HTML 파일 이미지 경로가 성공적으로 로컬로 변경되었습니다!")

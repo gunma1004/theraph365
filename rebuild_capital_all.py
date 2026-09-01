@@ -1,7 +1,18 @@
 ﻿# -*- coding: utf-8 -*-
 import os
+import random
 
 BASE_DOMAIN = "https://theraphy365.pages.dev"
+
+# ==============================================================================
+# 20종 스팸 회피 세부 테마 키워드 풀
+# ==============================================================================
+THEME_KEYWORDS_20 = [
+    "출장 힐링 마사지", "출장 홈케어 마사지", "출장 릴렉스 마사지", "출장 프리미엄 힐링 마사지", "출장 바디케어 마사지",
+    "출장 아로마 마사지", "출장 스웨디시 마사지", "출장 에스테틱 마사지", "출장 오일 테라피 마사지", "출장 딥티슈 마사지",
+    "출장 타이 마사지", "출장 홈타이 마사지", "출장 건식 테라피 마사지", "출장 스트레칭 마사지", "출장 지압 힐링 마사지",
+    "출장 리커버리 마사지", "출장 피로회복 마사지", "출장 1:1 맞춤형 마사지", "출장 감성 테라피 마사지", "출장 웰니스 마사지"
+]
 
 DETAILED_REGIONS = {
     # -------------------------------------------------------------
@@ -222,15 +233,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{loc_full} 출장마사지 1등 홈타이 힐링 테라피 | 테라피365</title>
+    <title>{loc_full} {k1} & {k2} 1등 힐링 테라피 | 테라피365</title>
     <link rel="canonical" href="{canonical_url}">
-    <meta name="description" content="{loc_full} 전지역 24시간 출장마사지 & 홈타이 추천 TOP 5 안내. 30분 내 신속 방문 및 100% 후불제 안심 케어.">
-    <meta name="keywords" content="{loc_full} 출장마사지, {loc_full} 홈타이, {loc_full} 스웨디시, 테라피365">
+    <meta name="description" content="{loc_full} 전지역 24시간 {k1} 및 {k2} 추천 TOP 5 안내. 30분 내 신속 방문 및 100% 후불제 안심 케어.">
+    <meta name="keywords" content="{loc_full} {k1}, {loc_full} {k2}, {loc_full} {k3}, 테라피365, {k4}">
     <meta name="robots" content="index, follow">
     
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{loc_full} 출장마사지 | 24시 프리미엄 힐링 홈케어 - 테라피365">
-    <meta property="og:description" content="{loc_full} 전지역 24시간 출장마사지 & 홈타이 추천 TOP 5 안내. 30분 내 신속 방문.">
+    <meta property="og:title" content="{loc_full} {k1} | 24시 프리미엄 힐링 홈케어 - 테라피365">
+    <meta property="og:description" content="{loc_full} 전지역 24시간 {k1} 및 {k2} 추천 TOP 5 안내. 30분 내 신속 방문.">
     <meta property="og:url" content="{canonical_url}">
     <meta property="og:image" content="{base_domain}/images/main-banner.jpg">
 
@@ -380,7 +391,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <div class="hero-banner">
         <div class="hero-badge">PREMIUM HOME HEALING CARE</div>
-        <h1>{loc_full} 출장마사지 & 홈타이</h1>
+        <h1>{loc_full} {k1} & {k2}</h1>
         <p>{loc_full} 전 지역 30분 안심 빠른 방문 테라피 서비스</p>
     </div>
 
@@ -391,14 +402,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <div class="section-header">
-            <h2>{loc_full} 출장마사지 & 홈타이 추천 TOP 5</h2>
+            <h2>{loc_full} {k1} & {k2} 추천 TOP 5</h2>
             <p>엄선된 프리미엄 관리사 100% 후불제 힐링 서비스</p>
         </div>
 
         <!-- 1번 업체: 기쁨조 테라피 -->
         <div class="vendor-card">
             <div class="vendor-thumb-wrap">
-                <img src="/images/vendor1.jpg" alt="{loc_full} 출장마사지 기쁨조 테라피" class="vendor-img">
+                <img src="/images/vendor1.jpg" alt="{loc_full} {k1} 기쁨조 테라피" class="vendor-img">
                 <div class="vendor-tag-float">👑 최우수 만족도 매장</div>
             </div>
             <div class="vendor-body">
@@ -426,7 +437,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <!-- 2번 업체: 한국미인 홈케어 -->
         <div class="vendor-card">
             <div class="vendor-thumb-wrap">
-                <img src="/images/vendor2.jpg" alt="{loc_full} 출장마사지 한국미인 홈케어" class="vendor-img">
+                <img src="/images/vendor2.jpg" alt="{loc_full} {k2} 한국미인 홈케어" class="vendor-img">
                 <div class="vendor-tag-float">✨ 야간/새벽 집중 힐링</div>
             </div>
             <div class="vendor-body">
@@ -454,7 +465,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <!-- 3번 업체: 미인클럽 스파 & 테라피 -->
         <div class="vendor-card">
             <div class="vendor-thumb-wrap">
-                <img src="/images/vendor3.jpg" alt="{loc_full} 출장마사지 미인클럽 스파" class="vendor-img">
+                <img src="/images/vendor3.jpg" alt="{loc_full} {k3} 미인클럽 스파" class="vendor-img">
                 <div class="vendor-tag-float">💎 호텔식 VIP 프로그램</div>
             </div>
             <div class="vendor-body">
@@ -482,7 +493,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <!-- 4번 업체: 퀸즈홈테라피 -->
         <div class="vendor-card">
             <div class="vendor-thumb-wrap">
-                <img src="/images/vendor4.jpg" alt="{loc_full} 출장마사지 퀸즈홈테라피" class="vendor-img">
+                <img src="/images/vendor4.jpg" alt="{loc_full} {k4} 퀸즈홈테라피" class="vendor-img">
                 <div class="vendor-tag-float">🌿 감성 바디 스트레칭</div>
             </div>
             <div class="vendor-body">
@@ -510,7 +521,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <!-- 5번 업체: 한국골든테라피 -->
         <div class="vendor-card">
             <div class="vendor-thumb-wrap">
-                <img src="/images/vendor5.jpg" alt="{loc_full} 출장마사지 한국골든테라피" class="vendor-img">
+                <img src="/images/vendor5.jpg" alt="{loc_full} {k1} 한국골든테라피" class="vendor-img">
                 <div class="vendor-tag-float">🏷️ 가성비 정찰제 1위</div>
             </div>
             <div class="vendor-body">
@@ -564,13 +575,15 @@ for folder, (kr_gu_name, dongs) in DETAILED_REGIONS.items():
     # 1-1. 구 index.html 생성
     index_file = os.path.join(folder, "index.html")
     canonical_url = f"{BASE_DOMAIN}/{folder}/"
+    k_samples = random.sample(THEME_KEYWORDS_20, 4)
     with open(index_file, "w", encoding="utf-8") as f:
         f.write(HTML_TEMPLATE.format(
             base_domain=BASE_DOMAIN,
             canonical_url=canonical_url,
             loc_full=kr_gu_name,
             parent_kr=kr_gu_name,
-            sub_links_html=dong_links_html
+            sub_links_html=dong_links_html,
+            k1=k_samples[0], k2=k_samples[1], k3=k_samples[2], k4=k_samples[3]
         ))
     total_count += 1
 
@@ -578,13 +591,15 @@ for folder, (kr_gu_name, dongs) in DETAILED_REGIONS.items():
     for dong_file_key, dong_name in dongs:
         file_path = os.path.join(folder, f"{dong_file_key}.html")
         dong_canonical = f"{BASE_DOMAIN}/{folder}/{dong_file_key}.html"
+        k_samples = random.sample(THEME_KEYWORDS_20, 4)
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(HTML_TEMPLATE.format(
                 base_domain=BASE_DOMAIN,
                 canonical_url=dong_canonical,
                 loc_full=f"{kr_gu_name} {dong_name}",
                 parent_kr=kr_gu_name,
-                sub_links_html=dong_links_html
+                sub_links_html=dong_links_html,
+                k1=k_samples[0], k2=k_samples[1], k3=k_samples[2], k4=k_samples[3]
             ))
         total_count += 1
 
@@ -595,14 +610,16 @@ for city_folder, (city_kr, gus) in CITY_MAP.items():
     
     file_path = os.path.join(city_folder, "index.html")
     city_canonical = f"{BASE_DOMAIN}/{city_folder}/"
+    k_samples = random.sample(THEME_KEYWORDS_20, 4)
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(HTML_TEMPLATE.format(
             base_domain=BASE_DOMAIN,
             canonical_url=city_canonical,
             loc_full=city_kr,
             parent_kr=city_kr,
-            sub_links_html=gu_links_html
+            sub_links_html=gu_links_html,
+            k1=k_samples[0], k2=k_samples[1], k3=k_samples[2], k4=k_samples[3]
         ))
     total_count += 1
 
-print(f"🎉 총 {total_count}개 경기/인천 전체 서브페이지(출장마사지 키워드 최적화 + 5개 업체 + 테라피365 브랜드) 재작성 완료!")
+print(f"🎉 총 {total_count}개 경기/인천 전체 서브페이지(20종 스팸 회피 키워드 패턴 + 5개 업체 + 테라피365 브랜드) 빌드 완료!")

@@ -2,31 +2,33 @@
 import os
 import sys
 
-# 실행할 빌드 단계 정의
+# 실행할 빌드 단계 정의 (20종 스팸 회피 키워드 파이프라인 반영)
 BUILD_STEPS = [
     ("1. 브랜드명 & 도메인 최신화 (테라피365)", "convert_to_theraphy365.py"),
-    ("2. 지역별 출장마사지 키워드 & 제휴처 최적화", "fix_korean_headers.py"),
-    ("3. 수도권 전지역 네비게이션 그리드 연결", "add_full_capital_grid.py"),
-    ("4. 네이버 SEO / Open Graph / Canonical 태그 생성", "optimize_naver_meta.py"),
-    ("5. 업체 카드 랜덤 셔플 스크립트 주입", "add_shuffle.py"),
-    ("6. sitemap.xml & robots.txt 최종 갱신", "generate_seo.py"),
-    ("7. GitHub 자동 커밋 및 배포 푸시", "git")
+    ("2. 수도권 전지역 네비게이션 그리드 연결", "add_full_capital_grid.py"),
+    ("3. 20종 스팸 회피 키워드 메타태그 생성 및 전면 재구성", "update_seo_keywords_theraphy365.py"),
+    ("4. 외부 이미지 로컬 정적 경로 일괄 치환", "update_images.py"),
+    ("5. Open Graph (og:title / og:description) 안전 동기화", "apply_all_og.py"),
+    ("6. 네이버 SEO / Canonical 태그 최종 점검", "optimize_naver_meta.py"),
+    ("7. 업체 카드 무작위 셔플 스크립트 주입", "add_shuffle.py"),
+    ("8. sitemap.xml & robots.txt 최종 갱신", "generate_seo.py"),
+    ("9. GitHub 자동 커밋 및 배포 푸시", "git")
 ]
 
 def print_menu():
-    print("=" * 55)
-    print("         테라피365 원클릭 네이버 SEO 빌드 & 배포")
-    print("=" * 55)
+    print("=" * 60)
+    print("        테라피365 20종 SEO 스팸 회피 통합 빌드 & 배포")
+    print("=" * 60)
     for idx, (desc, _) in enumerate(BUILD_STEPS, 1):
         print(f"[{idx}] {desc}")
-    print("[0] 전체 일괄 빌드 및 GitHub 배포 (1 ~ 7번 자동 실행)")
-    print("=" * 55)
+    print("[0] 전체 일괄 빌드 및 GitHub 배포 (1 ~ 9번 자동 실행)")
+    print("=" * 60)
 
 def run_script(script_name):
     if script_name == "git":
         print("\n📦 GitHub 커밋 및 원격 저장소 푸시 중...")
         os.system("git add .")
-        os.system('git commit -m "SEO optimization & build update"')
+        os.system('git commit -m "테라피365 20종 세부 테마 키워드 및 메타 최적화 자동 배포"')
         os.system("git push")
     else:
         if os.path.exists(script_name):
