@@ -1,32 +1,13 @@
 ﻿# -*- coding: utf-8 -*-
 import os
 import re
-import random
 
 SITE_DOMAIN = "https://theraphy365.pages.dev"
 DEFAULT_IMAGE = f"{SITE_DOMAIN}/images/main-banner.jpg"
 
-# ==============================================================================
-# 20종 스팸 회피 세부 테마 키워드 풀
-# ==============================================================================
-THEME_KEYWORDS_20 = [
-    "출장 힐링 마사지", "출장 홈케어 마사지", "출장 릴렉스 마사지", "출장 프리미엄 힐링 마사지", "출장 바디케어 마사지",
-    "출장 아로마 마사지", "출장 스웨디시 마사지", "출장 에스테틱 마사지", "출장 오일 테라피 마사지", "출장 딥티슈 마사지",
-    "출장 타이 마사지", "출장 홈타이 마사지", "출장 건식 테라피 마사지", "출장 스트레칭 마사지", "출장 지압 힐링 마사지",
-    "출장 리커버리 마사지", "출장 피로회복 마사지", "출장 1:1 맞춤형 마사지", "출장 감성 테라피 마사지", "출장 웰니스 마사지"
-]
-
-def sanitize_text(text, is_root=False):
-    """단독 '출장마사지' / '출장 마사지' 패턴을 20종 복합 테마 키워드로 치환"""
-    if is_root:
-        text = re.sub(r'출장\s*마사지', '방문 프리미엄 테라피', text)
-        text = re.sub(r'출장\s*안마', '홈케어 테라피', text)
-        return text
-
-    def repl(match):
-        return random.choice(THEME_KEYWORDS_20)
-
-    text = re.sub(r'(?<![가-힣a-zA-Z0-9])출장\s*마사지(?![가-힣a-zA-Z0-9])', repl, text)
+def sanitize_to_fixed(text):
+    """'출장마사지' 관련 문구를 고정된 형태로 깔끔하게 정돈"""
+    # 이미 '지역명 출장마사지' 형태가 포함되어 있다면 유지하고, 불필요한 단독 키워드만 정리
     text = re.sub(r'출장\s*안마', '홈케어 테라피', text)
     return text
 
@@ -56,16 +37,15 @@ for root, dirs, files in os.walk(current_dir):
 
         current_title = title_match.group(1).strip()
 
-        # 2. <meta name="description"> 추출 (속성 순서 무관)
+        # 2. <meta name="description"> 추출
         desc_match = re.search(r'<meta[^>]*name=["\']description["\'][^>]*content=["\'](.*?)["\']', content, flags=re.DOTALL | re.IGNORECASE)
         if not desc_match:
             desc_match = re.search(r'<meta[^>]*content=["\'](.*?)["\'][^>]*name=["\']description["\']', content, flags=re.DOTALL | re.IGNORECASE)
         
         current_desc = desc_match.group(1).strip() if desc_match else current_title
 
-        # 단독 스팸 키워드 필터링 및 20종 복합 패턴 적용
-        current_title = sanitize_text(current_title, is_root)
-        current_desc = sanitize_text(current_desc, is_root)
+        current_title = sanitize_to_fixed(current_title)
+        current_desc = sanitize_to_fixed(current_desc)
 
         # 3. Canonical 및 og:url 경로 구성
         if is_root:
@@ -98,6 +78,6 @@ for root, dirs, files in os.walk(current_dir):
             f.write(content)
 
         count += 1
-        print(f"✔ 태그 동기화 및 20종 키워드 최적화 완료: {rel_path}")
+        print(f"✔ 태그 동기화 및 고정 키워드 최적화 완료: {rel_path}")
 
-print(f"\n🎉 총 {count}개의 모든 지역/동 HTML 파일에 네이버 최적화 Open Graph 적용 완료!")
+print(f"\n🎉 총 {count}개의 모든 지역/동 HTML 파일에 출장마사지 고정형 Open Graph 적용 완료!")
