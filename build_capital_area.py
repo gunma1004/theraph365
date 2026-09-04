@@ -180,26 +180,26 @@ DETAILED_REGIONS = {
 
 CITY_MAP = {
     "suwon": ("수원시", [
-        ("../suwon_paldal/index.html", "팔달구"), ("../suwon_yeongtong/index.html", "영통구"),
-        ("../suwon_jangan/index.html", "장안구"), ("../suwon_gwonseon/index.html", "권선구")
+        ("../suwon_paldal-massage/index.html", "팔달구"), ("../suwon_yeongtong-massage/index.html", "영통구"),
+        ("../suwon_jangan-massage/index.html", "장안구"), ("../suwon_gwonseon-massage/index.html", "권선구")
     ]),
     "seongnam": ("성남시", [
-        ("../seongnam_bundang/index.html", "분당구"), ("../seongnam_sujeong/index.html", "수정구"),
-        ("../seongnam_jungwon/index.html", "중원구")
+        ("../seongnam_bundang-massage/index.html", "분당구"), ("../seongnam_sujeong-massage/index.html", "수정구"),
+        ("../seongnam_jungwon-massage/index.html", "중원구")
     ]),
     "goyang": ("고양시", [
-        ("../goyang_ilsandong/index.html", "일산동구"), ("../goyang_ilsanseo/index.html", "일산서구"),
-        ("../goyang_deogyang/index.html", "덕양구")
+        ("../goyang_ilsandong-massage/index.html", "일산동구"), ("../goyang_ilsanseo-massage/index.html", "일산서구"),
+        ("../goyang_deogyang-massage/index.html", "덕양구")
     ]),
     "yongin": ("용인시", [
-        ("../yongin_suji/index.html", "수지구"), ("../yongin_giheung/index.html", "기흥구"),
-        ("../yongin_cheoin/index.html", "처인구")
+        ("../yongin_suji-massage/index.html", "수지구"), ("../yongin_giheung-massage/index.html", "기흥구"),
+        ("../yongin_cheoin-massage/index.html", "처인구")
     ]),
     "anyang": ("안양시", [
-        ("../anyang_dongan/index.html", "동안구"), ("../anyang_manan/index.html", "만안구")
+        ("../anyang_dongan-massage/index.html", "동안구"), ("../anyang_manan-massage/index.html", "만안구")
     ]),
     "ansan": ("안산시", [
-        ("../ansan_danwon/index.html", "단원구"), ("../ansan_sangnok/index.html", "상록구")
+        ("../ansan_danwon-massage/index.html", "단원구"), ("../ansan_sangnok-massage/index.html", "상록구")
     ])
 }
 
@@ -541,11 +541,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 total_count = 0
 
 for folder, (kr_gu_name, dongs) in DETAILED_REGIONS.items():
-    os.makedirs(folder, exist_ok=True)
+    target_folder = f"{folder}-massage"
+    os.makedirs(target_folder, exist_ok=True)
+    
     dong_links_html = "".join([f'<a href="{f}.html" class="gu-item">{name} 출장마사지</a>\n            ' for f, name in dongs])
     
-    index_file = os.path.join(folder, "index.html")
-    canonical_url = f"{BASE_DOMAIN}/{folder}/"
+    index_file = os.path.join(target_folder, "index.html")
+    canonical_url = f"{BASE_DOMAIN}/{target_folder}/"
     with open(index_file, "w", encoding="utf-8") as f:
         f.write(HTML_TEMPLATE.format(
             base_domain=BASE_DOMAIN,
@@ -557,8 +559,8 @@ for folder, (kr_gu_name, dongs) in DETAILED_REGIONS.items():
     total_count += 1
 
     for dong_file_key, dong_name in dongs:
-        file_path = os.path.join(folder, f"{dong_file_key}.html")
-        dong_canonical = f"{BASE_DOMAIN}/{folder}/{dong_file_key}.html"
+        file_path = os.path.join(target_folder, f"{dong_file_key}.html")
+        dong_canonical = f"{BASE_DOMAIN}/{target_folder}/{dong_file_key}.html"
         full_loc_name = f"{kr_gu_name} {dong_name}"
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(HTML_TEMPLATE.format(
@@ -586,4 +588,4 @@ for city_folder, (city_kr, gus) in CITY_MAP.items():
         ))
     total_count += 1
 
-print(f"🎉 총 {total_count}개 경기/인천 전체 서브페이지 ('지역명 출장마사지' 형식 적용) 빌드 완료!")
+print(f"🎉 총 {total_count}개 경기/인천 전체 서브페이지 (구 폴더명 '-massage' 및 링크 연동) 빌드 완료!")

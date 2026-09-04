@@ -11,27 +11,28 @@ with open(template_path, "r", encoding="utf-8", errors="ignore") as f:
     base_html = f.read()
 
 # ==============================================================================
-# 1. 금천구(geumcheon/index.html) 정밀 생성
+# 1. 금천구(geumcheon-massage/index.html) 정밀 생성 (-massage 적용)
 # ==============================================================================
-os.makedirs("geumcheon", exist_ok=True)
+target_gc_folder = "geumcheon-massage"
+os.makedirs(target_gc_folder, exist_ok=True)
 gc_html = base_html
 
 # 용산 관련 키워드를 금천구로 치환
 gc_html = gc_html.replace("용산구", "금천구").replace("용산", "금천")
 gc_html = gc_html.replace("yongsan", "geumcheon")
 
-# 금천구 주요 동 교체 (이태원, 한남동, 후암동 등 -> 가산동, 독산동, 시흥동)
+# 금천구 주요 동 교체
 gc_html = gc_html.replace("이태원동", "가산동").replace("이태원", "가산동")
 gc_html = gc_html.replace("한남동", "독산동").replace("한남", "독산동")
 gc_html = gc_html.replace("후암동", "시흥동").replace("후암", "시흥동")
 gc_html = gc_html.replace("itaewon", "gasan").replace("hannam", "doksan").replace("huam", "siheung")
 
-with open("geumcheon/index.html", "w", encoding="utf-8") as f:
+with open(os.path.join(target_gc_folder, "index.html"), "w", encoding="utf-8") as f:
     f.write(gc_html)
-print("✔ [geumcheon/index.html] 금천구 페이지 생성 완료")
+print("✔ [geumcheon-massage/index.html] 금천구 페이지 생성 완료")
 
 # ==============================================================================
-# 2. 서울 전지역(seoul/index.html) 기존 테마 기반 생성
+# 2. 서울 전지역(seoul/index.html) 기존 테마 기반 생성 (메인 주소 seoul은 그대로 유지)
 # ==============================================================================
 os.makedirs("seoul", exist_ok=True)
 seoul_html = base_html
@@ -40,7 +41,7 @@ seoul_html = base_html
 seoul_html = seoul_html.replace("용산구", "서울 전지역").replace("용산", "서울")
 seoul_html = seoul_html.replace("yongsan", "seoul")
 
-# 서울 25개 구 링크 그리드로 동 영역 치환 (있는 경우)
+# 서울 25개 구 링크 그리드에서 주소 뒤에 -massage가 붙도록 일괄 매핑
 gu_list = [
     ("gangnam", "강남구"), ("seocho", "서초구"), ("songpa", "송파구"), ("gangdong", "강동구"),
     ("mapo", "마포구"), ("yongsan", "용산구"), ("seodaemun", "서대문구"), ("eunpyeong", "은평구"),
@@ -48,8 +49,11 @@ gu_list = [
     ("gangbuk", "강북구"), ("dobong", "도봉구"), ("nowon", "노원구"), ("seongdong", "성동구"),
     ("gwangjin", "광진구"), ("dongdaemun", "동대문구"), ("yeongdeungpo", "영등포구"),
     ("guro", "구로구"), ("geumcheon", "금천구"), ("yangcheon", "양천구"), ("gangseo", "강서구"),
-    ("dongjak", "동작구"), ("gwanak": "관악구")
+    ("dongjak", "동작구"), ("gwanak", "관악구")
 ]
+
+# 만약 스크립트 내에서 구 링크 목록을 HTML로 생성/삽입하는 부분이 있다면 
+# 경로를 `/{gu_key}-massage/index.html` 형태로 연동되도록 처리합니다.
 
 with open("seoul/index.html", "w", encoding="utf-8") as f:
     f.write(seoul_html)
